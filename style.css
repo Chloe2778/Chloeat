@@ -966,3 +966,9 @@ footer {
     max-width: 1000px;
     margin: 0 auto;
 }
+.plan-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
