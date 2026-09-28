@@ -1,39 +1,726 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chloeat — Weekly Meal Planner</title>
+
+    <title>Chloeat | Make Something With What You Have</title>
+
+    <style>
+        /* ==============================
+           BASIC SETUP
+        ============================== */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            color: #38533d;
+            background: #eaf4e3;
+            overflow-x: hidden;
+        }
+
+        /* ==============================
+           HEADER
+        ============================== */
+
+        header {
+            width: 100%;
+            padding: 25px 7%;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: Georgia, serif;
+            font-size: 32px;
+            font-weight: bold;
+            color: #315438;
+        }
+
+        .logo span {
+            color: #d58fa4;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #527057;
+            margin-left: 28px;
+
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        nav a:hover {
+            color: #d1849b;
+        }
+
+        /* ==============================
+           HERO SECTION
+        ============================== */
+
+        .hero {
+            position: relative;
+
+            max-width: 1100px;
+            margin: 45px auto 0;
+            padding: 20px;
+        }
+
+        .hero-card {
+            position: relative;
+            z-index: 2;
+
+            background: #fffaf2;
+            border-radius: 38px;
+
+            padding: 75px 45px 80px;
+
+            text-align: center;
+
+            box-shadow:
+                0 20px 50px rgba(73, 105, 73, 0.12);
+        }
+
+        .small-title {
+            margin-bottom: 18px;
+
+            color: #d1849b;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            max-width: 800px;
+            margin: 0 auto;
+
+            font-family: Georgia, serif;
+            font-size: clamp(42px, 7vw, 72px);
+            line-height: 1.05;
+
+            color: #315438;
+        }
+
+        .hero-text {
+            max-width: 650px;
+            margin: 25px auto 0;
+
+            color: #68786a;
+            font-size: 18px;
+            line-height: 1.7;
+        }
+
+        /* ==============================
+           FRIDGE INPUT AREA
+        ============================== */
+
+        .fridge-area {
+            max-width: 700px;
+            margin: 42px auto 0;
+        }
+
+        .fridge-label {
+            display: block;
+
+            margin-bottom: 12px;
+
+            color: #38533d;
+            font-family: Georgia, serif;
+            font-size: 23px;
+            font-weight: bold;
+        }
+
+        .input-description {
+            margin-bottom: 17px;
+
+            color: #7c887e;
+            font-size: 14px;
+        }
+
+        .ingredient-box {
+            display: flex;
+            align-items: center;
+
+            background: white;
+            border: 1px solid #e1ddd4;
+            border-radius: 20px;
+
+            padding: 8px;
+
+            box-shadow:
+                0 10px 30px rgba(80, 100, 75, 0.08);
+        }
+
+        .ingredient-box input {
+            flex: 1;
+
+            min-width: 0;
+
+            border: none;
+            outline: none;
+
+            padding: 17px 18px;
+
+            background: transparent;
+
+            color: #38533d;
+            font-size: 16px;
+        }
+
+        .ingredient-box input::placeholder {
+            color: #a0aaa1;
+        }
+
+        .find-button {
+            border: none;
+
+            padding: 16px 25px;
+
+            border-radius: 15px;
+
+            background: #d992a7;
+            color: white;
+
+            font-size: 15px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s ease;
+        }
+
+        .find-button:hover {
+            background: #c97f96;
+            transform: translateY(-2px);
+        }
+
+        .example {
+            margin-top: 14px;
+
+            color: #8b968c;
+            font-size: 13px;
+        }
+
+        /* ==============================
+           SMALL EXPLANATION
+        ============================== */
+
+        .idea {
+            max-width: 600px;
+            margin: 55px auto 0;
+
+            padding-top: 30px;
+
+            border-top: 1px solid #e7dfd4;
+        }
+
+        .idea-title {
+            margin-bottom: 10px;
+
+            color: #557453;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .idea p {
+            color: #778379;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* ==============================
+           BOTANICAL DECORATIONS
+        ============================== */
+
+        .leaf {
+            position: absolute;
+
+            width: 55px;
+            height: 90px;
+
+            background: #a9c79c;
+
+            border-radius: 100% 0 100% 0;
+
+            opacity: 0.75;
+        }
+
+        .leaf.one {
+            top: 45px;
+            left: -15px;
+
+            transform: rotate(-30deg);
+        }
+
+        .leaf.two {
+            top: 120px;
+            left: 20px;
+
+            transform: rotate(20deg) scale(0.75);
+        }
+
+        .leaf.three {
+            right: -10px;
+            bottom: 100px;
+
+            transform: rotate(150deg);
+        }
+
+        .leaf.four {
+            right: 35px;
+            bottom: 45px;
+
+            transform: rotate(110deg) scale(0.75);
+        }
+
+        /* ==============================
+           FLOWERS
+        ============================== */
+
+        .flower {
+            position: absolute;
+
+            width: 45px;
+            height: 45px;
+
+            z-index: 3;
+        }
+
+        .flower::before,
+        .flower::after {
+            content: "";
+
+            position: absolute;
+
+            width: 25px;
+            height: 25px;
+
+            background: #efb2c1;
+
+            border-radius: 50%;
+        }
+
+        .flower::before {
+            top: 0;
+            left: 10px;
+
+            box-shadow:
+                -13px 13px #efb2c1,
+                13px 13px #efb2c1,
+                0 26px #efb2c1;
+        }
+
+        .flower::after {
+            width: 12px;
+            height: 12px;
+
+            top: 17px;
+            left: 17px;
+
+            background: #e1a05e;
+        }
+
+        .flower.one {
+            top: 30px;
+            right: 75px;
+
+            transform: rotate(15deg);
+        }
+
+        .flower.two {
+            bottom: 55px;
+            left: 55px;
+
+            transform: scale(0.8) rotate(-15deg);
+        }
+
+        /* ==============================
+           HOW IT WORKS
+        ============================== */
+
+        .how-it-works {
+            max-width: 1000px;
+
+            margin: 100px auto;
+            padding: 0 25px;
+
+            text-align: center;
+        }
+
+        .section-title {
+            margin-bottom: 15px;
+
+            color: #315438;
+
+            font-family: Georgia, serif;
+            font-size: 42px;
+        }
+
+        .section-description {
+            margin-bottom: 45px;
+
+            color: #718073;
+        }
+
+        .steps {
+            display: grid;
+
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 22px;
+        }
+
+        .step {
+            background: #fffaf2;
+
+            border-radius: 25px;
+
+            padding: 35px 25px;
+
+            box-shadow:
+                0 12px 30px rgba(73, 105, 73, 0.08);
+        }
+
+        .step-number {
+            width: 45px;
+            height: 45px;
+
+            margin: 0 auto 20px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: #dcebd4;
+            color: #557453;
+
+            font-weight: bold;
+        }
+
+        .step h3 {
+            margin-bottom: 12px;
+
+            color: #38533d;
+
+            font-family: Georgia, serif;
+            font-size: 23px;
+        }
+
+        .step p {
+            color: #718073;
+
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        /* ==============================
+           FOOTER
+        ============================== */
+
+        footer {
+            padding: 35px 20px 45px;
+
+            text-align: center;
+
+            color: #718073;
+            font-size: 14px;
+        }
+
+        /* ==============================
+           MOBILE
+        ============================== */
+
+        @media (max-width: 750px) {
+
+            header {
+                padding: 20px;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .hero {
+                margin-top: 25px;
+                padding: 15px;
+            }
+
+            .hero-card {
+                padding: 55px 22px 60px;
+
+                border-radius: 28px;
+            }
+
+            h1 {
+                font-size: 43px;
+            }
+
+            .hero-text {
+                font-size: 16px;
+            }
+
+            .ingredient-box {
+                flex-direction: column;
+
+                background: transparent;
+                border: none;
+                box-shadow: none;
+
+                gap: 10px;
+            }
+
+            .ingredient-box input {
+                width: 100%;
+
+                background: white;
+                border: 1px solid #e1ddd4;
+                border-radius: 15px;
+            }
+
+            .find-button {
+                width: 100%;
+            }
+
+            .steps {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 35px;
+            }
+
+            .leaf.one {
+                left: -30px;
+            }
+
+            .leaf.three {
+                right: -30px;
+            }
+        }
+    </style>
 </head>
+
 
 <body>
 
+    <!-- ==============================
+         HEADER
+    ============================== -->
+
     <header>
-        <h1>Chloeat</h1>
-        <p>Plan your meals. Eat better.</p>
+
+        <div class="logo">
+            Chloe<span>at</span>
+        </div>
+
+        <nav>
+            <a href="#how-it-works">How it works</a>
+            <a href="#fridge">My fridge</a>
+        </nav>
+
     </header>
 
+
+    <!-- ==============================
+         MAIN CONTENT
+    ============================== -->
+
     <main>
-        <h2>Your weekly meal planner</h2>
-        <p>
-            Plan delicious meals for your week and make grocery shopping easier.
-        </p>
 
-        <button>Create my meal plan</button>
+        <section class="hero" id="fridge">
 
-        <section>
-            <h2>How Chloeat works</h2>
+            <!-- Leaves -->
+            <div class="leaf one"></div>
+            <div class="leaf two"></div>
+            <div class="leaf three"></div>
+            <div class="leaf four"></div>
 
-            <h3>1. Tell us your preferences</h3>
-            <p>Choose the foods and meals that work for you.</p>
+            <!-- Flowers -->
+            <div class="flower one"></div>
+            <div class="flower two"></div>
 
-            <h3>2. Get your weekly plan</h3>
-            <p>Chloeat organizes your meals for the week.</p>
 
-            <h3>3. Make your grocery list</h3>
-            <p>Get the ingredients you need in one simple list.</p>
+            <div class="hero-card">
+
+                <div class="small-title">
+                    Your fridge, your ingredients, your meals
+                </div>
+
+
+                <h1>
+                    Make a weekly recipe.
+                </h1>
+
+
+                <p class="hero-text">
+                    Tell Chloeat what's in your fridge, and we'll help
+                    you discover meals you can make without starting
+                    your grocery list from scratch.
+                </p>
+
+
+                <!-- INGREDIENT INPUT -->
+
+                <div class="fridge-area">
+
+                    <label class="fridge-label" for="ingredients">
+                        What's in your fridge?
+                    </label>
+
+                    <p class="input-description">
+                        Add the ingredients you already have.
+                    </p>
+
+
+                    <div class="ingredient-box">
+
+                        <input
+                            id="ingredients"
+                            type="text"
+                            placeholder="e.g. chicken, tomatoes, eggs, rice..."
+                        >
+
+                        <button
+                            class="find-button"
+                            type="button"
+                        >
+                            Find meals
+                        </button>
+
+                    </div>
+
+
+                    <p class="example">
+                        You can enter as many ingredients as you want.
+                    </p>
+
+                </div>
+
+
+                <!-- SMALL MESSAGE -->
+
+                <div class="idea">
+
+                    <div class="idea-title">
+                        Not sure what to make?
+                    </div>
+
+                    <p>
+                        That's exactly what Chloeat is for.
+                        Give us what you've got, and we'll help
+                        you turn it into something you'll actually
+                        want to eat.
+                    </p>
+
+                </div>
+
+            </div>
+
         </section>
+
+
+        <!-- ==============================
+             HOW IT WORKS
+        ============================== -->
+
+        <section class="how-it-works" id="how-it-works">
+
+            <h2 class="section-title">
+                How Chloeat works
+            </h2>
+
+            <p class="section-description">
+                No complicated meal planning. Just start with what's already in your kitchen.
+            </p>
+
+
+            <div class="steps">
+
+                <div class="step">
+
+                    <div class="step-number">
+                        1
+                    </div>
+
+                    <h3>
+                        Tell us what you have
+                    </h3>
+
+                    <p>
+                        Enter the ingredients sitting in your
+                        fridge, freezer, or pantry.
+                    </p>
+
+                </div>
+
+
+                <div class="step">
+
+                    <div class="step-number">
+                        2
+                    </div>
+
+                    <h3>
+                        Discover meals
+                    </h3>
+
+                    <p>
+                        Chloeat suggests meals you can make
+                        using the ingredients you already have.
+                    </p>
+
+                </div>
+
+
+                <div class="step">
+
+                    <div class="step-number">
+                        3
+                    </div>
+
+                    <h3>
+                        Cook & enjoy
+                    </h3>
+
+                    <p>
+                        Choose something you like, see what
+                        you're missing, and get cooking.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
     </main>
 
+
+    <!-- ==============================
+         FOOTER
+    ============================== -->
+
+    <footer>
+
+        <p>
+            Made with care by Chloeat
+        </p>
+
+    </footer>
+
+
 </body>
+
 </html>
