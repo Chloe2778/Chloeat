@@ -8,11 +8,16 @@
     <title>Reading your receipt | Chloeat</title>
 
     <link rel="stylesheet" href="style.css">
+
+    <!-- Tesseract.js -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
 </head>
 
 <body>
 
     <header>
+
         <a href="index.html" class="logo">
             Chloe<span>at</span>
         </a>
@@ -20,6 +25,7 @@
         <nav>
             <a href="index.html">Home</a>
         </nav>
+
     </header>
 
 
@@ -31,20 +37,28 @@
                 ✿
             </div>
 
-            <p class="small-title">JUST A MOMENT</p>
-
-            <h1 id="processing-title">
-                Uploading your receipt...
-            </h1>
-
-            <p class="processing-text" id="processing-message">
-                We're getting your receipt ready.
+            <p class="small-title">
+                READING YOUR RECEIPT
             </p>
 
+            <h1 id="processing-title">
+                Preparing your receipt...
+            </h1>
+
+            <p
+                class="processing-text"
+                id="processing-message"
+            >
+                We're getting everything ready.
+            </p>
+
+
             <div class="loading-dots">
+
                 <span></span>
                 <span></span>
                 <span></span>
+
             </div>
 
         </section>
@@ -59,48 +73,175 @@
 
     <script>
 
-        const title = document.getElementById("processing-title");
-        const message = document.getElementById("processing-message");
+        /*
+         * GET THE RECEIPT IMAGE
+         */
 
-        const steps = [
-            {
-                title: "Uploading your receipt...",
-                message: "We're getting your receipt ready."
-            },
-            {
-                title: "Reading the items...",
-                message: "We're looking for the groceries on your receipt."
-            },
-            {
-                title: "Organizing your groceries...",
-                message: "We're putting everything together."
-            },
-            {
-                title: "Your receipt is ready!",
-                message: "Let's check what we found."
+        const receiptImage =
+            localStorage.getItem("receiptImage");
+
+
+        const title =
+            document.getElementById("processing-title");
+
+
+        const message =
+            document.getElementById("processing-message");
+
+
+        /*
+         * IF THERE IS NO RECEIPT
+         */
+
+        if (!receiptImage) {
+
+            title.textContent =
+                "No receipt found.";
+
+            message.textContent =
+                "Please go back and upload a receipt.";
+
+        }
+
+
+        /*
+         * OTHERWISE START OCR
+         */
+
+        else {
+
+            readReceipt();
+
+        }
+
+
+        async function readReceipt() {
+
+            try {
+
+                /*
+                 * STEP 1
+                 */
+
+                title.textContent =
+                    "Reading your receipt...";
+
+                message.textContent =
+                    "We're looking for the text on your receipt.";
+
+
+                /*
+                 * CREATE OCR WORKER
+                 */
+
+                const worker =
+                    await Tesseract.createWorker(
+                        "eng",
+                        1,
+                        {
+                            logger: function (info) {
+
+                                console.log(info);
+
+                            }
+                        }
+                    );
+
+
+                /*
+                 * STEP 2
+                 */
+
+                title.textContent =
+                    "Finding your groceries...";
+
+                message.textContent =
+                    "We're reading the items on your receipt.";
+
+
+                /*
+                 * RUN OCR
+                 */
+
+                const result =
+                    await worker.recognize(
+                        receiptImage
+                    );
+
+
+                /*
+                 * GET THE TEXT
+                 */
+
+                const receiptText =
+                    result.data.text;
+
+
+                console.log(
+                    "OCR RESULT:",
+                    receiptText
+                );
+
+
+                /*
+                 * SAVE OCR TEXT
+                 */
+
+                localStorage.setItem(
+                    "receiptText",
+                    receiptText
+                );
+
+
+                /*
+                 * CLOSE OCR WORKER
+                 */
+
+                await worker.terminate();
+
+
+                /*
+                 * STEP 3
+                 */
+
+                title.textContent =
+                    "Receipt scanned!";
+
+                message.textContent =
+                    "Let's check what Chloeat found.";
+
+
+                /*
+                 * WAIT A MOMENT
+                 */
+
+                setTimeout(function () {
+
+                    window.location.href =
+                        "review.html";
+
+                }, 1200);
+
             }
-        ];
 
-        let currentStep = 0;
 
-        const processingTimer = setInterval(function () {
+            catch (error) {
 
-            currentStep++;
+                console.error(
+                    "OCR ERROR:",
+                    error
+                );
 
-            if (currentStep < steps.length) {
 
-                title.textContent = steps[currentStep].title;
-                message.textContent = steps[currentStep].message;
+                title.textContent =
+                    "We couldn't read the receipt.";
 
-            } else {
-
-                clearInterval(processingTimer);
-
-                window.location.href = "review.html";
+                message.textContent =
+                    "Please try taking a clearer photo and try again.";
 
             }
 
-        }, 1200);
+        }
 
     </script>
 
