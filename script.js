@@ -1,6 +1,12 @@
 const receiptUpload = document.getElementById("receipt-upload");
+const scanButton = document.getElementById("scan-button");
 
-if (receiptUpload) {
+if (scanButton && receiptUpload) {
+
+    scanButton.addEventListener("click", function () {
+        receiptUpload.click();
+    });
+
     receiptUpload.addEventListener("change", function () {
 
         if (receiptUpload.files.length > 0) {
