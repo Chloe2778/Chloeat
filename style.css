@@ -934,3 +934,35 @@ footer {
 .kitchen-page .plan-button {
     margin-top: 40px;
 }
+/* YOUR WEEK PAGE */
+
+.week-page {
+    max-width: 1100px;
+    margin: 80px auto;
+    padding: 0 25px 80px;
+    text-align: center;
+}
+
+.week-page .section-header {
+    max-width: 650px;
+    margin: 0 auto 50px;
+}
+
+.week-page .section-header h1 {
+    margin-bottom: 18px;
+    color: #315438;
+    font-family: Georgia, serif;
+    font-size: clamp(42px, 7vw, 64px);
+    line-height: 1.05;
+}
+
+.week-page .section-header > p:last-child {
+    color: #718073;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.week-page .weekly-plan {
+    max-width: 1000px;
+    margin: 0 auto;
+}
