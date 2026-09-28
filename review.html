@@ -180,36 +180,54 @@
 
     <script>
 
-        // Remove an ingredient
+        /*
+         * REMOVE AN ITEM
+         */
+
+        function setupRemoveButton(button) {
+
+            button.addEventListener("click", function () {
+
+                const item = button.closest(".review-item");
+
+                item.remove();
+
+            });
+
+        }
+
 
         const removeButtons =
             document.querySelectorAll(".remove-button");
 
-        removeButtons.forEach(function(button) {
 
-            button.addEventListener("click", function() {
+        removeButtons.forEach(function (button) {
 
-                button.closest(".review-item").remove();
-
-            });
+            setupRemoveButton(button);
 
         });
 
 
-        // Add a new ingredient
+        /*
+         * ADD A NEW ITEM
+         */
 
         const addItemButton =
             document.getElementById("add-item");
 
-        addItemButton.addEventListener("click", function() {
+
+        addItemButton.addEventListener("click", function () {
 
             const newItem =
                 document.createElement("div");
 
             newItem.className = "review-item";
 
+
             newItem.innerHTML = `
+
                 <div>
+
                     <input
                         class="item-name"
                         type="text"
@@ -221,7 +239,9 @@
                         type="text"
                         placeholder="Quantity"
                     >
+
                 </div>
+
 
                 <button
                     type="button"
@@ -229,30 +249,69 @@
                 >
                     Remove
                 </button>
+
             `;
+
 
             document
                 .querySelector(".review-list")
                 .appendChild(newItem);
 
 
-            newItem
-                .querySelector(".remove-button")
-                .addEventListener("click", function() {
-
-                    newItem.remove();
-
-                });
+            setupRemoveButton(
+                newItem.querySelector(".remove-button")
+            );
 
         });
 
 
-        // Continue to Your Kitchen
+        /*
+         * SAVE GROCERIES AND GO TO KITCHEN
+         */
 
         const continueButton =
             document.getElementById("continue-button");
 
-        continueButton.addEventListener("click", function() {
+
+        continueButton.addEventListener("click", function () {
+
+            const items =
+                document.querySelectorAll(".review-item");
+
+
+            const groceries = [];
+
+
+            items.forEach(function (item) {
+
+                const name =
+                    item.querySelector(".item-name").value.trim();
+
+
+                const quantity =
+                    item.querySelector(".item-quantity").value.trim();
+
+
+                if (name !== "") {
+
+                    groceries.push({
+
+                        name: name,
+
+                        quantity: quantity
+
+                    });
+
+                }
+
+            });
+
+
+            localStorage.setItem(
+                "groceries",
+                JSON.stringify(groceries)
+            );
+
 
             window.location.href = "kitchen.html";
 
