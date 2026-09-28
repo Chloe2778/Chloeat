@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Receipt Results | Chloeat</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+
+        <a href="index.html" class="logo">
+            Chloe<span>at</span>
+        </a>
+
+        <nav>
+            <a href="index.html">Home</a>
+        </nav>
+
+    </header>
+
+
+    <main>
+
+        <section class="review-page">
+
+            <div class="section-header">
+
+                <p class="small-title">
+                    RECEIPT SCAN
+                </p>
+
+                <h1>
+                    Here's what we found.
+                </h1>
+
+                <p>
+                    Chloeat is showing the text it actually found
+                    on your receipt. Check it before continuing.
+                </p>
+
+            </div>
+
+
+            <div
+                class="review-list"
+                id="review-list"
+            >
+            </div>
+
+
+            <button
+                type="button"
+                class="add-item-button"
+                id="add-item"
+            >
+                + Add another grocery
+            </button>
+
+
+            <button
+                type="button"
+                class="plan-button"
+                id="continue-button"
+            >
+                Continue to My Kitchen
+            </button>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        <p>
+            Made with care by Chloeat
+        </p>
+
+    </footer>
+
+
+    <script>
+
+        /*
+         * GET THE REAL OCR RESULT
+         */
+
+        const receiptText =
+            localStorage.getItem("receiptText");
+
+
+        const reviewList =
+            document.getElementById(
+                "review-list"
+            );
+
+
+        /*
+         * SHOW EXACTLY WHAT OCR FOUND
+         */
+
+        console.log(
+            "OCR TEXT:",
+            receiptText
+        );
+
+
+        /*
+         * NO OCR RESULT
+         */
+
+        if (!receiptText || receiptText.trim() === "") {
+
+            reviewList.innerHTML = `
+
+                <div class="review-item">
+
+                    <div>
+
+                        <input
+                            class="item-name"
+                            type="text"
+                            placeholder="Grocery name"
+                        >
+
+                        <input
+                            class="item-quantity"
+                            type="text"
+                            placeholder="Quantity"
+                        >
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="remove-button"
+                    >
+                        Remove
+                    </button>
+
+                </div>
+
+                <p>
+                    Chloeat didn't find any text on the receipt.
+                    You can add groceries manually.
+                </p>
+
+            `;
+
+        }
+
+
+        /*
+         * OCR RESULT EXISTS
+         */
+
+        else {
+
+            const lines =
+                receiptText
+                    .split("\n")
+                    .map(function (line) {
+
+                        return line.trim();
+
+                    })
+                    .filter(function (line) {
+
+                        return line.length > 1;
+
+                    });
+
+
+            /*
+             * DISPLAY EVERY OCR LINE
+             *
+             * We are deliberately NOT trying
+             * to interpret the receipt yet.
+             */
+
+            lines.forEach(function (line) {
+
+                createItem(line);
+
+            });
+
+        }
+
+
+        /*
+         * CREATE AN ITEM
+         */
+
+        function createItem(name) {
+
+            const item =
+                document.createElement("div");
+
+
+            item.className =
+                "review-item";
+
+
+            item.innerHTML = `
+
+                <div>
+
+                    <input
+                        class="item-name"
+                        type="text"
+                        value="${escapeHTML(name)}"
+                    >
+
+                    <input
+                        class="item-quantity"
+                        type="text"
+                        placeholder="Quantity"
+                    >
+
+                </div>
+
+                <button
+                    type="button"
+                    class="remove-button"
+                >
+                    Remove
+                </button>
+
+            `;
+
+
+            reviewList.appendChild(item);
+
+
+            item.querySelector(
+                ".remove-button"
+            ).addEventListener(
+                "click",
+                function () {
+
+                    item.remove();
+
+                }
+            );
+
+        }
+
+
+        /*
+         * BASIC HTML ESCAPING
+         */
+
+        function escapeHTML(text) {
+
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+        }
+
+
+        /*
+         * ADD GROCERY
+         */
+
+        document
+            .getElementById("add-item")
+            .addEventListener(
+                "click",
+                function () {
+
+                    createItem("");
+
+                    const inputs =
+                        reviewList.querySelectorAll(
+                            ".item-name"
+                        );
+
+
+                    inputs[
+                        inputs.length - 1
+                    ].focus();
+
+                }
+            );
+
+
+        /*
+         * SAVE TO KITCHEN
+         */
+
+        document
+            .getElementById("continue-button")
+            .addEventListener(
+                "click",
+                function () {
+
+                    const items =
+                        document.querySelectorAll(
+                            ".review-item"
+                        );
+
+
+                    const groceries = [];
+
+
+                    items.forEach(function (item) {
+
+                        const name =
+                            item
+                                .querySelector(
+                                    ".item-name"
+                                )
+                                .value
+                                .trim();
+
+
+                        const quantity =
+                            item
+                                .querySelector(
+                                    ".item-quantity"
+                                )
+                                .value
+                                .trim();
+
+
+                        if (name !== "") {
+
+                            groceries.push({
+
+                                name: name,
+
+                                quantity: quantity
+
+                            });
+
+                        }
+
+                    });
+
+
+                    localStorage.setItem(
+                        "groceries",
+                        JSON.stringify(groceries)
+                    );
+
+
+                    window.location.href =
+                        "kitchen.html";
+
+                }
+            );
+
+    </script>
+
+</body>
+
+</html>
