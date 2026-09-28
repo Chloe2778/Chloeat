@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
+
 <body>
 
     <!-- ==============================
@@ -25,104 +26,508 @@
 
         <nav>
             <a href="#how-it-works">How it works</a>
-            <a href="#fridge">My fridge</a>
+            <a href="#kitchen">My kitchen</a>
         </nav>
 
     </header>
 
 
     <!-- ==============================
-         MAIN CONTENT
+         MAIN
     ============================== -->
 
     <main>
 
+
         <!-- ==============================
-             HERO / FRIDGE SECTION
+             HOME / RECEIPT SCANNER
         ============================== -->
 
-        <section class="hero" id="fridge">
+        <section class="hero" id="home">
 
-            <!-- Botanical decorations will be added with CSS -->
+            <!-- Botanical decorations -->
+
+            <div class="leaf one"></div>
+            <div class="leaf two"></div>
+            <div class="leaf three"></div>
+            <div class="leaf four"></div>
+
+            <div class="flower one"></div>
+            <div class="flower two"></div>
 
 
             <div class="hero-card">
 
                 <div class="small-title">
-                    Your fridge, your ingredients, your meals
+                    Your groceries, your kitchen, your meals
                 </div>
 
 
                 <h1>
-                    Make your weekly recipe.
+                    Turn your groceries into a week of meals.
                 </h1>
 
 
                 <p class="hero-text">
-                    Tell Chloeat what's in your fridge, and we'll help
-                    you discover meals you can make without starting
-                    your grocery list from scratch.
+                    Scan your grocery receipt and Chloeat will
+                    help you turn what you already bought into
+                    meals for the week.
                 </p>
 
 
                 <!-- ==============================
-                     INGREDIENT INPUT
+                     RECEIPT SCANNER
                 ============================== -->
 
-                <div class="fridge-area">
+                <div class="scanner-area">
 
-                    <label class="fridge-label" for="ingredients">
-                        What's in your fridge?
-                    </label>
+                    <h2>
+                        Start with your grocery receipt
+                    </h2>
 
-                    <p class="input-description">
-                        Add the ingredients you already have.
+                    <p>
+                        Take a photo of your receipt and we'll
+                        identify the groceries you bought.
                     </p>
 
 
-                    <div class="ingredient-box">
-
-                        <input
-                            id="ingredients"
-                            type="text"
-                            placeholder="e.g. chicken, tomatoes, eggs, rice..."
-                        >
-
-                        <button
-                            class="find-button"
-                            type="button"
-                        >
-                            Find meals
-                        </button>
-
-                    </div>
+                    <label
+                        class="scan-button"
+                        for="receipt-upload"
+                    >
+                        Scan your receipt
+                    </label>
 
 
-                    <p class="example">
-                        You can enter as many ingredients as you want.
+                    <input
+                        id="receipt-upload"
+                        type="file"
+                        accept="image/*"
+                        capture="environment"
+                    >
+
+
+                    <p class="scanner-note">
+                        Chloeat will identify quantities when
+                        they're shown on the receipt.
                     </p>
 
                 </div>
 
 
                 <!-- ==============================
-                     INTRODUCTION MESSAGE
+                     MANUAL OPTION
                 ============================== -->
 
-                <div class="idea">
-
-                    <div class="idea-title">
-                        Not sure what to make?
-                    </div>
+                <div class="manual-option">
 
                     <p>
-                        That's exactly what Chloeat is for.
-                        Give us what you've got, and we'll help
-                        you turn it into something you'll actually
-                        want to eat.
+                        Don't have your receipt?
+                    </p>
+
+                    <button
+                        class="manual-button"
+                        type="button"
+                    >
+                        Add groceries manually
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==============================
+             RECEIPT REVIEW
+        ============================== -->
+
+        <section
+            class="receipt-review"
+            id="receipt-review"
+        >
+
+            <div class="section-header">
+
+                <p class="small-title">
+                    Step 2
+                </p>
+
+                <h2>
+                    Let's check your groceries.
+                </h2>
+
+                <p>
+                    Chloeat found these items on your receipt.
+                    Check the quantities before continuing.
+                </p>
+
+            </div>
+
+
+            <div class="grocery-list">
+
+                <!-- Example grocery item -->
+
+                <div class="grocery-item">
+
+                    <div class="grocery-info">
+
+                        <h3>
+                            Chicken breast
+                        </h3>
+
+                        <p>
+                            Quantity found on receipt
+                        </p>
+
+                    </div>
+
+                    <div class="quantity">
+
+                        <input
+                            type="number"
+                            value="1.24"
+                            min="0"
+                            step="0.01"
+                        >
+
+                        <select>
+                            <option value="kg">kg</option>
+                            <option value="g">g</option>
+                            <option value="lb">lb</option>
+                            <option value="oz">oz</option>
+                            <option value="units">units</option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="grocery-item">
+
+                    <div class="grocery-info">
+
+                        <h3>
+                            Tomatoes
+                        </h3>
+
+                        <p>
+                            Quantity found on receipt
+                        </p>
+
+                    </div>
+
+                    <div class="quantity">
+
+                        <input
+                            type="number"
+                            value="0.82"
+                            min="0"
+                            step="0.01"
+                        >
+
+                        <select>
+                            <option value="kg">kg</option>
+                            <option value="g">g</option>
+                            <option value="lb">lb</option>
+                            <option value="oz">oz</option>
+                            <option value="units">units</option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="grocery-item">
+
+                    <div class="grocery-info">
+
+                        <h3>
+                            Eggs
+                        </h3>
+
+                        <p>
+                            Quantity found on receipt
+                        </p>
+
+                    </div>
+
+                    <div class="quantity">
+
+                        <input
+                            type="number"
+                            value="12"
+                            min="0"
+                            step="1"
+                        >
+
+                        <select>
+                            <option value="units">units</option>
+                            <option value="dozen">dozen</option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Missing quantity example -->
+
+                <div class="grocery-item quantity-missing">
+
+                    <div class="grocery-info">
+
+                        <h3>
+                            Broccoli
+                        </h3>
+
+                        <p>
+                            Quantity wasn't found on the receipt.
+                        </p>
+
+                    </div>
+
+                    <div class="quantity">
+
+                        <input
+                            type="number"
+                            placeholder="Add amount"
+                            min="0"
+                            step="0.01"
+                        >
+
+                        <select>
+                            <option value="kg">kg</option>
+                            <option value="g">g</option>
+                            <option value="units">units</option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="confirm-button"
+                type="button"
+            >
+                Confirm my groceries
+            </button>
+
+        </section>
+
+
+        <!-- ==============================
+             KITCHEN INVENTORY
+        ============================== -->
+
+        <section
+            class="kitchen"
+            id="kitchen"
+        >
+
+            <div class="section-header">
+
+                <p class="small-title">
+                    Your kitchen
+                </p>
+
+                <h2>
+                    Here's what you have.
+                </h2>
+
+                <p>
+                    Chloeat will use these ingredients when
+                    creating your meal plan.
+                </p>
+
+            </div>
+
+
+            <div class="inventory">
+
+                <div class="inventory-item">
+
+                    <h3>
+                        Chicken breast
+                    </h3>
+
+                    <p>
+                        1.24 kg
                     </p>
 
                 </div>
+
+
+                <div class="inventory-item">
+
+                    <h3>
+                        Tomatoes
+                    </h3>
+
+                    <p>
+                        0.82 kg
+                    </p>
+
+                </div>
+
+
+                <div class="inventory-item">
+
+                    <h3>
+                        Eggs
+                    </h3>
+
+                    <p>
+                        12 units
+                    </p>
+
+                </div>
+
+
+                <div class="inventory-item">
+
+                    <h3>
+                        Broccoli
+                    </h3>
+
+                    <p>
+                        0.60 kg
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="plan-button"
+                type="button"
+            >
+                Create my weekly meal plan
+            </button>
+
+        </section>
+
+
+        <!-- ==============================
+             WEEKLY MEAL PLAN
+        ============================== -->
+
+        <section
+            class="meal-plan"
+            id="meal-plan"
+        >
+
+            <div class="section-header">
+
+                <p class="small-title">
+                    Your week
+                </p>
+
+                <h2>
+                    Your Chloeat meal plan.
+                </h2>
+
+                <p>
+                    Meals created around the ingredients
+                    you already have.
+                </p>
+
+            </div>
+
+
+            <div class="weekly-plan">
+
+                <article class="meal-day">
+
+                    <h3>
+                        Monday
+                    </h3>
+
+                    <h4>
+                        Chicken & rice bowl
+                    </h4>
+
+                    <p>
+                        Uses approximately 300 g chicken.
+                    </p>
+
+                </article>
+
+
+                <article class="meal-day">
+
+                    <h3>
+                        Tuesday
+                    </h3>
+
+                    <h4>
+                        Roasted chicken & potatoes
+                    </h4>
+
+                    <p>
+                        Uses approximately 300 g chicken.
+                    </p>
+
+                </article>
+
+
+                <article class="meal-day">
+
+                    <h3>
+                        Wednesday
+                    </h3>
+
+                    <h4>
+                        Chicken fried rice
+                    </h4>
+
+                    <p>
+                        Uses approximately 250 g chicken.
+                    </p>
+
+                </article>
+
+
+                <article class="meal-day">
+
+                    <h3>
+                        Thursday
+                    </h3>
+
+                    <h4>
+                        Tomato chicken pasta
+                    </h4>
+
+                    <p>
+                        Uses approximately 250 g chicken.
+                    </p>
+
+                </article>
+
+
+                <article class="meal-day">
+
+                    <h3>
+                        Friday
+                    </h3>
+
+                    <h4>
+                        Chicken & broccoli rice
+                    </h4>
+
+                    <p>
+                        Uses approximately 250 g chicken.
+                    </p>
+
+                </article>
 
             </div>
 
@@ -133,78 +538,79 @@
              HOW IT WORKS
         ============================== -->
 
-        <section class="how-it-works" id="how-it-works">
+        <section
+            class="how-it-works"
+            id="how-it-works"
+        >
 
-            <h2 class="section-title">
-                How Chloeat works
-            </h2>
+            <div class="section-header">
 
-            <p class="section-description">
-                No complicated meal planning. Just start with
-                what's already in your kitchen.
-            </p>
+                <h2>
+                    How Chloeat works
+                </h2>
+
+                <p>
+                    From grocery receipt to weekly meals,
+                    without starting from scratch.
+                </p>
+
+            </div>
 
 
             <div class="steps">
 
-                <!-- STEP 1 -->
-
-                <div class="step">
+                <article class="step">
 
                     <div class="step-number">
                         1
                     </div>
 
                     <h3>
-                        Tell us what you have
+                        Scan your receipt
                     </h3>
 
                     <p>
-                        Enter the ingredients sitting in your
-                        fridge, freezer, or pantry.
+                        Take a photo of your grocery receipt
+                        and let Chloeat identify what you bought.
                     </p>
 
-                </div>
+                </article>
 
 
-                <!-- STEP 2 -->
-
-                <div class="step">
+                <article class="step">
 
                     <div class="step-number">
                         2
                     </div>
 
                     <h3>
-                        Discover meals
+                        Confirm your kitchen
                     </h3>
 
                     <p>
-                        Chloeat suggests meals you can make
-                        using the ingredients you already have.
+                        Check the ingredients and quantities.
+                        Add anything the receipt couldn't identify.
                     </p>
 
-                </div>
+                </article>
 
 
-                <!-- STEP 3 -->
-
-                <div class="step">
+                <article class="step">
 
                     <div class="step-number">
                         3
                     </div>
 
                     <h3>
-                        Cook & enjoy
+                        Plan your week
                     </h3>
 
                     <p>
-                        Choose something you like, see what
-                        you're missing, and get cooking.
+                        Chloeat creates meals around what you
+                        already have and keeps track of what you use.
                     </p>
 
-                </div>
+                </article>
 
             </div>
 
