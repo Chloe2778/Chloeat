@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Kitchen | Chloeat</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <a href="index.html" class="logo">
+            Chloe<span>at</span>
+        </a>
+
+        <nav>
+            <a href="index.html">Home</a>
+        </nav>
+    </header>
+
+
+    <main>
+
+        <section class="kitchen-page">
+
+            <div class="section-header">
+                <p class="small-title">STEP 2</p>
+
+                <h1>Here's what you have.</h1>
+
+                <p>
+                    We've found these groceries from your receipt.
+                    Take a moment to check everything before creating your meal plan.
+                </p>
+            </div>
+
+
+            <div class="inventory">
+
+                <div class="inventory-item">
+                    <h3>Chicken breast</h3>
+                    <p>1.24 kg</p>
+                </div>
+
+                <div class="inventory-item">
+                    <h3>Tomatoes</h3>
+                    <p>0.82 kg</p>
+                </div>
+
+                <div class="inventory-item">
+                    <h3>Eggs</h3>
+                    <p>12 units</p>
+                </div>
+
+                <div class="inventory-item">
+                    <h3>Broccoli</h3>
+                    <p>0.60 kg</p>
+                </div>
+
+            </div>
+
+
+            <button class="plan-button">
+                Create my weekly plan
+            </button>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+        Made with care by Chloeat
+    </footer>
+
+</body>
+</html>
