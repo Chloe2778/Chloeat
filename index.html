@@ -13,42 +13,34 @@
 
 <body>
 
-    <!-- ==============================
-         HEADER
-    ============================== -->
-
     <header>
 
-        <div class="logo">
+        <a href="index.html" class="logo">
             Chloe<span>at</span>
-        </div>
+        </a>
 
         <nav>
-            <a href="#how-it-works">How it works</a>
-            <a href="#kitchen">My kitchen</a>
+            <a href="#how-it-works">
+                How it works
+            </a>
+
+            <a href="kitchen.html">
+                My Kitchen
+            </a>
         </nav>
 
     </header>
 
 
-    <!-- ==============================
-         MAIN
-    ============================== -->
-
     <main>
 
-        <!-- ==============================
-             HOME / RECEIPT SCANNER
-        ============================== -->
-
         <section class="hero" id="home">
-
-            <!-- Botanical decorations -->
 
             <div class="leaf leaf-one"></div>
             <div class="leaf leaf-two"></div>
             <div class="leaf leaf-three"></div>
             <div class="leaf leaf-four"></div>
+
 
             <div class="flower flower-one">
                 <span></span>
@@ -78,9 +70,7 @@
                 </p>
 
 
-                <!-- ==============================
-                     RECEIPT SCANNER
-                ============================== -->
+                <!-- RECEIPT SCANNER -->
 
                 <div class="scanner-area">
 
@@ -96,18 +86,24 @@
 
                     <div class="scan-wrapper">
 
-        <button type="button" class="scan-button" id="scan-button">
-    SCAN YOUR RECEIPT
-</button>
+                        <button
+                            type="button"
+                            class="scan-button"
+                            id="scan-button"
+                        >
+                            SCAN YOUR RECEIPT
+                        </button>
 
-<input
-    id="receipt-upload"
-    type="file"
-    accept="image/*"
-    capture="environment"
->
 
-                        </div>
+                        <input
+                            id="receipt-upload"
+                            type="file"
+                            accept="image/*"
+                            capture="environment"
+                        >
+
+                    </div>
+
 
                     <p class="scanner-note">
                         Chloeat will identify quantities when
@@ -117,9 +113,7 @@
                 </div>
 
 
-                <!-- ==============================
-                     MANUAL OPTION
-                ============================== -->
+                <!-- MANUAL OPTION -->
 
                 <div class="manual-option">
 
@@ -130,6 +124,7 @@
                     <button
                         class="manual-button"
                         type="button"
+                        id="manual-button"
                     >
                         Add groceries manually
                     </button>
@@ -140,9 +135,8 @@
 
         </section>
 
-        <!-- ==============================
-             HOW IT WORKS
-        ============================== -->
+
+        <!-- HOW IT WORKS -->
 
         <section
             class="how-it-works"
@@ -213,7 +207,7 @@
 
                     <p>
                         Chloeat creates meals around what you
-                        already have and keeps track of what you use.
+                        already have.
                     </p>
 
                 </article>
@@ -225,10 +219,6 @@
     </main>
 
 
-    <!-- ==============================
-         FOOTER
-    ============================== -->
-
     <footer>
 
         <p>
@@ -238,9 +228,151 @@
     </footer>
 
 
-    <script src="script.js"></script>
+    <script>
 
-    
+        const receiptUpload =
+            document.getElementById(
+                "receipt-upload"
+            );
+
+
+        const scanButton =
+            document.getElementById(
+                "scan-button"
+            );
+
+
+        /*
+         * OPEN FILE PICKER
+         */
+
+        scanButton.addEventListener(
+            "click",
+            function () {
+
+                receiptUpload.click();
+
+            }
+        );
+
+
+        /*
+         * WHEN A RECEIPT IS SELECTED
+         */
+
+        receiptUpload.addEventListener(
+            "change",
+            function () {
+
+                if (
+                    receiptUpload.files.length === 0
+                ) {
+
+                    return;
+
+                }
+
+
+                /*
+                 * IMPORTANT:
+                 * START A COMPLETELY NEW SCAN
+                 */
+
+                localStorage.removeItem(
+                    "groceries"
+                );
+
+
+                localStorage.removeItem(
+                    "receiptText"
+                );
+
+
+                localStorage.removeItem(
+                    "receiptImage"
+                );
+
+
+                /*
+                 * READ THE IMAGE
+                 */
+
+                const file =
+                    receiptUpload.files[0];
+
+
+                const reader =
+                    new FileReader();
+
+
+                reader.onload =
+                    function () {
+
+                        localStorage.setItem(
+                            "receiptImage",
+                            reader.result
+                        );
+
+
+                        localStorage.setItem(
+                            "receiptName",
+                            file.name
+                        );
+
+
+                        /*
+                         * GO TO PROCESSING
+                         */
+
+                        window.location.href =
+                            "processing.html";
+
+                    };
+
+
+                reader.readAsDataURL(file);
+
+            }
+        );
+
+
+        /*
+         * MANUAL GROCERIES
+         */
+
+        const manualButton =
+            document.getElementById(
+                "manual-button"
+            );
+
+
+        manualButton.addEventListener(
+            "click",
+            function () {
+
+                localStorage.removeItem(
+                    "groceries"
+                );
+
+
+                localStorage.removeItem(
+                    "receiptText"
+                );
+
+
+                localStorage.removeItem(
+                    "receiptImage"
+                );
+
+
+                window.location.href =
+                    "kitchen.html";
+
+            }
+        );
+
+    </script>
+
 </body>
 
 </html>
