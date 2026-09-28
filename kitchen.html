@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Your Kitchen | Chloeat</title>
 
     <link rel="stylesheet" href="style.css">
@@ -11,6 +13,7 @@
 <body>
 
     <header>
+
         <a href="index.html" class="logo">
             Chloe<span>at</span>
         </a>
@@ -18,6 +21,7 @@
         <nav>
             <a href="index.html">Home</a>
         </nav>
+
     </header>
 
 
@@ -26,56 +30,125 @@
         <section class="kitchen-page">
 
             <div class="section-header">
-                <p class="small-title">STEP 2</p>
+
+                <p class="small-title">STEP 4</p>
 
                 <h1>Here's what you have.</h1>
 
-               <p>
-    We've found these groceries from your receipt.
-    Take a moment to check everything before creating your meal plan.
-</p>
-
-<p id="receipt-status" class="receipt-status"></p>
-                
-            </div>
-
-
-            <div class="inventory">
-
-                <div class="inventory-item">
-                    <h3>Chicken breast</h3>
-                    <p>1.24 kg</p>
-                </div>
-
-                <div class="inventory-item">
-                    <h3>Tomatoes</h3>
-                    <p>0.82 kg</p>
-                </div>
-
-                <div class="inventory-item">
-                    <h3>Eggs</h3>
-                    <p>12 units</p>
-                </div>
-
-                <div class="inventory-item">
-                    <h3>Broccoli</h3>
-                    <p>0.60 kg</p>
-                </div>
+                <p>
+                    These are the groceries currently in your kitchen.
+                </p>
 
             </div>
 
 
-            <a href="week.html" class="plan-button">
-    Create my weekly plan
-</a>
+            <div
+                class="inventory"
+                id="inventory"
+            >
+
+                <!-- Groceries will be added here by JavaScript -->
+
+            </div>
+
+
+            <a
+                href="week.html"
+                class="plan-button"
+            >
+                Create my weekly plan
+            </a>
+
         </section>
 
     </main>
 
 
     <footer>
-        Made with care by Chloeat
+
+        <p>
+            Made with care by Chloeat
+        </p>
+
     </footer>
 
+
+    <script>
+
+        /*
+         * GET THE GROCERIES SAVED ON THE REVIEW PAGE
+         */
+
+        const savedGroceries =
+            localStorage.getItem("groceries");
+
+
+        const inventory =
+            document.getElementById("inventory");
+
+
+        /*
+         * DISPLAY THE GROCERIES
+         */
+
+        if (savedGroceries) {
+
+            const groceries =
+                JSON.parse(savedGroceries);
+
+
+            groceries.forEach(function (grocery) {
+
+                const item =
+                    document.createElement("div");
+
+
+                item.className =
+                    "inventory-item";
+
+
+                item.innerHTML = `
+
+                    <h3>
+                        ${grocery.name}
+                    </h3>
+
+                    <p>
+                        ${grocery.quantity}
+                    </p>
+
+                `;
+
+
+                inventory.appendChild(item);
+
+            });
+
+        }
+
+
+        /*
+         * IF THERE ARE NO GROCERIES
+         */
+
+        if (
+            !savedGroceries ||
+            JSON.parse(savedGroceries).length === 0
+        ) {
+
+            inventory.innerHTML = `
+
+                <p class="empty-kitchen">
+                    Your kitchen is empty.
+                    Go back and add some groceries.
+                </p>
+
+            `;
+
+        }
+
+    </script>
+
 </body>
+
 </html>
