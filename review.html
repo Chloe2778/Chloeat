@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +13,7 @@
 <body>
 
     <header>
+
         <a href="index.html" class="logo">
             Chloe<span>at</span>
         </a>
@@ -19,6 +21,7 @@
         <nav>
             <a href="index.html">Home</a>
         </nav>
+
     </header>
 
 
@@ -27,6 +30,7 @@
         <section class="review-page">
 
             <div class="section-header">
+
                 <p class="small-title">STEP 3</p>
 
                 <h1>Here's what we found.</h1>
@@ -35,56 +39,134 @@
                     We've read your receipt and found these groceries.
                     Check everything before continuing.
                 </p>
+
             </div>
 
 
             <div class="review-list">
 
                 <div class="review-item">
+
                     <div>
-                        <h3>Chicken breast</h3>
-                        <p>1.24 kg</p>
+                        <input
+                            class="item-name"
+                            type="text"
+                            value="Chicken breast"
+                        >
+
+                        <input
+                            class="item-quantity"
+                            type="text"
+                            value="1.24 kg"
+                        >
                     </div>
 
-                    <button type="button">Remove</button>
+                    <button
+                        type="button"
+                        class="remove-button"
+                    >
+                        Remove
+                    </button>
+
                 </div>
 
 
                 <div class="review-item">
+
                     <div>
-                        <h3>Tomatoes</h3>
-                        <p>0.82 kg</p>
+                        <input
+                            class="item-name"
+                            type="text"
+                            value="Tomatoes"
+                        >
+
+                        <input
+                            class="item-quantity"
+                            type="text"
+                            value="0.82 kg"
+                        >
                     </div>
 
-                    <button type="button">Remove</button>
+                    <button
+                        type="button"
+                        class="remove-button"
+                    >
+                        Remove
+                    </button>
+
                 </div>
 
 
                 <div class="review-item">
+
                     <div>
-                        <h3>Eggs</h3>
-                        <p>12 units</p>
+                        <input
+                            class="item-name"
+                            type="text"
+                            value="Eggs"
+                        >
+
+                        <input
+                            class="item-quantity"
+                            type="text"
+                            value="12 units"
+                        >
                     </div>
 
-                    <button type="button">Remove</button>
+                    <button
+                        type="button"
+                        class="remove-button"
+                    >
+                        Remove
+                    </button>
+
                 </div>
 
 
                 <div class="review-item">
+
                     <div>
-                        <h3>Broccoli</h3>
-                        <p>0.60 kg</p>
+                        <input
+                            class="item-name"
+                            type="text"
+                            value="Broccoli"
+                        >
+
+                        <input
+                            class="item-quantity"
+                            type="text"
+                            value="0.60 kg"
+                        >
                     </div>
 
-                    <button type="button">Remove</button>
+                    <button
+                        type="button"
+                        class="remove-button"
+                    >
+                        Remove
+                    </button>
+
                 </div>
 
             </div>
 
 
-            <a href="kitchen.html" class="plan-button">
+            <button
+                type="button"
+                class="add-item-button"
+                id="add-item"
+            >
+                + Add another grocery
+            </button>
+
+
+            <button
+                type="button"
+                class="plan-button"
+                id="continue-button"
+            >
                 Continue to My Kitchen
-            </a>
+            </button>
 
         </section>
 
@@ -95,5 +177,89 @@
         Made with care by Chloeat
     </footer>
 
+
+    <script>
+
+        // Remove an ingredient
+
+        const removeButtons =
+            document.querySelectorAll(".remove-button");
+
+        removeButtons.forEach(function(button) {
+
+            button.addEventListener("click", function() {
+
+                button.closest(".review-item").remove();
+
+            });
+
+        });
+
+
+        // Add a new ingredient
+
+        const addItemButton =
+            document.getElementById("add-item");
+
+        addItemButton.addEventListener("click", function() {
+
+            const newItem =
+                document.createElement("div");
+
+            newItem.className = "review-item";
+
+            newItem.innerHTML = `
+                <div>
+                    <input
+                        class="item-name"
+                        type="text"
+                        placeholder="Grocery name"
+                    >
+
+                    <input
+                        class="item-quantity"
+                        type="text"
+                        placeholder="Quantity"
+                    >
+                </div>
+
+                <button
+                    type="button"
+                    class="remove-button"
+                >
+                    Remove
+                </button>
+            `;
+
+            document
+                .querySelector(".review-list")
+                .appendChild(newItem);
+
+
+            newItem
+                .querySelector(".remove-button")
+                .addEventListener("click", function() {
+
+                    newItem.remove();
+
+                });
+
+        });
+
+
+        // Continue to Your Kitchen
+
+        const continueButton =
+            document.getElementById("continue-button");
+
+        continueButton.addEventListener("click", function() {
+
+            window.location.href = "kitchen.html";
+
+        });
+
+    </script>
+
 </body>
+
 </html>
