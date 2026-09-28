@@ -37,24 +37,45 @@
 
                 <p>
                     These are the groceries currently in your kitchen.
+                    You can edit, remove, or add anything before planning your week.
                 </p>
 
             </div>
 
+
+            <!-- ==============================
+                 GROCERY LIST
+            ============================== -->
 
             <div
                 class="inventory"
                 id="inventory"
             >
 
-                <!-- Groceries will be added here by JavaScript -->
-
             </div>
 
+
+            <!-- ==============================
+                 ADD GROCERY
+            ============================== -->
+
+            <button
+                type="button"
+                class="add-item-button"
+                id="add-grocery"
+            >
+                + Add grocery
+            </button>
+
+
+            <!-- ==============================
+                 WEEKLY PLAN BUTTON
+            ============================== -->
 
             <a
                 href="week.html"
                 class="plan-button"
+                id="plan-button"
             >
                 Create my weekly plan
             </a>
@@ -76,28 +97,61 @@
     <script>
 
         /*
-         * GET THE GROCERIES SAVED ON THE REVIEW PAGE
+         * GET SAVED GROCERIES
          */
+
+        let groceries = [];
 
         const savedGroceries =
             localStorage.getItem("groceries");
 
 
+        if (savedGroceries) {
+
+            groceries =
+                JSON.parse(savedGroceries);
+
+        }
+
+
+        /*
+         * DISPLAY GROCERIES
+         */
+
         const inventory =
             document.getElementById("inventory");
 
 
-        /*
-         * DISPLAY THE GROCERIES
-         */
+        function displayGroceries() {
 
-        if (savedGroceries) {
-
-            const groceries =
-                JSON.parse(savedGroceries);
+            inventory.innerHTML = "";
 
 
-            groceries.forEach(function (grocery) {
+            /*
+             * EMPTY KITCHEN
+             */
+
+            if (groceries.length === 0) {
+
+                inventory.innerHTML = `
+
+                    <p class="empty-kitchen">
+                        Your kitchen is empty.
+                        Add some groceries to get started.
+                    </p>
+
+                `;
+
+                return;
+
+            }
+
+
+            /*
+             * CREATE EACH GROCERY CARD
+             */
+
+            groceries.forEach(function (grocery, index) {
 
                 const item =
                     document.createElement("div");
@@ -109,13 +163,32 @@
 
                 item.innerHTML = `
 
-                    <h3>
-                        ${grocery.name}
-                    </h3>
+                    <div class="kitchen-item-content">
 
-                    <p>
-                        ${grocery.quantity}
-                    </p>
+                        <input
+                            class="kitchen-name"
+                            type="text"
+                            value="${grocery.name}"
+                            data-index="${index}"
+                        >
+
+                        <input
+                            class="kitchen-quantity"
+                            type="text"
+                            value="${grocery.quantity}"
+                            data-index="${index}"
+                        >
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="kitchen-remove"
+                        data-index="${index}"
+                    >
+                        Remove
+                    </button>
 
                 `;
 
@@ -124,28 +197,136 @@
 
             });
 
+
+            /*
+             * REMOVE BUTTONS
+             */
+
+            const removeButtons =
+                document.querySelectorAll(".kitchen-remove");
+
+
+            removeButtons.forEach(function (button) {
+
+                button.addEventListener("click", function () {
+
+                    const index =
+                        Number(button.dataset.index);
+
+
+                    groceries.splice(index, 1);
+
+
+                    localStorage.setItem(
+                        "groceries",
+                        JSON.stringify(groceries)
+                    );
+
+
+                    displayGroceries();
+
+                });
+
+            });
+
+
+            /*
+             * NAME EDITING
+             */
+
+            const nameInputs =
+                document.querySelectorAll(".kitchen-name");
+
+
+            nameInputs.forEach(function (input) {
+
+                input.addEventListener("change", function () {
+
+                    const index =
+                        Number(input.dataset.index);
+
+
+                    groceries[index].name =
+                        input.value.trim();
+
+
+                    localStorage.setItem(
+                        "groceries",
+                        JSON.stringify(groceries)
+                    );
+
+                });
+
+            });
+
+
+            /*
+             * QUANTITY EDITING
+             */
+
+            const quantityInputs =
+                document.querySelectorAll(".kitchen-quantity");
+
+
+            quantityInputs.forEach(function (input) {
+
+                input.addEventListener("change", function () {
+
+                    const index =
+                        Number(input.dataset.index);
+
+
+                    groceries[index].quantity =
+                        input.value.trim();
+
+
+                    localStorage.setItem(
+                        "groceries",
+                        JSON.stringify(groceries)
+                    );
+
+                });
+
+            });
+
         }
 
 
         /*
-         * IF THERE ARE NO GROCERIES
+         * ADD GROCERY BUTTON
          */
 
-        if (
-            !savedGroceries ||
-            JSON.parse(savedGroceries).length === 0
-        ) {
+        const addGroceryButton =
+            document.getElementById("add-grocery");
 
-            inventory.innerHTML = `
 
-                <p class="empty-kitchen">
-                    Your kitchen is empty.
-                    Go back and add some groceries.
-                </p>
+        addGroceryButton.addEventListener("click", function () {
 
-            `;
+            groceries.push({
 
-        }
+                name: "New grocery",
+
+                quantity: ""
+
+            });
+
+
+            localStorage.setItem(
+                "groceries",
+                JSON.stringify(groceries)
+            );
+
+
+            displayGroceries();
+
+        });
+
+
+        /*
+         * FIRST DISPLAY
+         */
+
+        displayGroceries();
 
     </script>
 
