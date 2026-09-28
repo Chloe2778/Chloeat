@@ -1,0 +1,975 @@
+```css
+/* ==============================
+   BASIC SETUP
+============================== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+
+    font-family: Arial, sans-serif;
+
+    color: #38533d;
+    background: #eaf4e3;
+
+    overflow-x: hidden;
+}
+
+button,
+input,
+select {
+    font-family: inherit;
+}
+
+
+/* ==============================
+   HEADER
+============================== */
+
+header {
+    width: 100%;
+    padding: 25px 7%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-family: Georgia, serif;
+    font-size: 32px;
+    font-weight: bold;
+
+    color: #315438;
+}
+
+.logo span {
+    color: #d58fa4;
+}
+
+nav a {
+    text-decoration: none;
+
+    color: #527057;
+
+    margin-left: 28px;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    transition: 0.2s ease;
+}
+
+nav a:hover {
+    color: #d1849b;
+}
+
+
+/* ==============================
+   HERO SECTION
+============================== */
+
+.hero {
+    position: relative;
+
+    max-width: 1100px;
+
+    margin: 45px auto 0;
+    padding: 20px;
+}
+
+.hero-card {
+    position: relative;
+    z-index: 2;
+
+    background: #fffaf2;
+
+    border-radius: 38px;
+
+    padding: 75px 45px 80px;
+
+    text-align: center;
+
+    box-shadow:
+        0 20px 50px rgba(73, 105, 73, 0.12);
+}
+
+.small-title {
+    margin-bottom: 18px;
+
+    color: #d1849b;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+h1 {
+    max-width: 800px;
+
+    margin: 0 auto;
+
+    font-family: Georgia, serif;
+
+    font-size: clamp(42px, 7vw, 72px);
+
+    line-height: 1.05;
+
+    color: #315438;
+}
+
+.hero-text {
+    max-width: 650px;
+
+    margin: 25px auto 0;
+
+    color: #68786a;
+
+    font-size: 18px;
+    line-height: 1.7;
+}
+
+
+/* ==============================
+   RECEIPT SCANNER
+============================== */
+
+.scanner-area {
+    max-width: 700px;
+
+    margin: 42px auto 0;
+}
+
+.scanner-area h2 {
+    margin-bottom: 12px;
+
+    color: #38533d;
+
+    font-family: Georgia, serif;
+
+    font-size: 23px;
+}
+
+.scanner-area > p {
+    margin-bottom: 22px;
+
+    color: #7c887e;
+
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
+/* Hide the actual file input */
+
+#receipt-upload {
+    display: none;
+}
+
+
+/* Scan button */
+
+.scan-button {
+    display: inline-block;
+
+    padding: 17px 30px;
+
+    border-radius: 15px;
+
+    background: #d992a7;
+    color: white;
+
+    font-size: 15px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.scan-button:hover {
+    background: #c97f96;
+
+    transform: translateY(-2px);
+}
+
+
+/* Scanner note */
+
+.scanner-note {
+    margin-top: 14px !important;
+    margin-bottom: 0 !important;
+
+    color: #8b968c !important;
+
+    font-size: 13px !important;
+}
+
+
+/* ==============================
+   MANUAL OPTION
+============================== */
+
+.manual-option {
+    max-width: 600px;
+
+    margin: 45px auto 0;
+
+    padding-top: 30px;
+
+    border-top: 1px solid #e7dfd4;
+}
+
+.manual-option p {
+    margin-bottom: 12px;
+
+    color: #557453;
+
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.manual-button {
+    border: none;
+
+    padding: 12px 20px;
+
+    border-radius: 12px;
+
+    background: #dcebd4;
+    color: #557453;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.manual-button:hover {
+    background: #cfe2c6;
+
+    transform: translateY(-1px);
+}
+
+
+/* ==============================
+   BOTANICAL DECORATIONS
+============================== */
+
+.leaf {
+    position: absolute;
+
+    width: 55px;
+    height: 90px;
+
+    background: #a9c79c;
+
+    border-radius: 100% 0 100% 0;
+
+    opacity: 0.75;
+
+    pointer-events: none;
+
+    z-index: 1;
+}
+
+.leaf.one {
+    top: 45px;
+    left: -15px;
+
+    transform: rotate(-30deg);
+}
+
+.leaf.two {
+    top: 120px;
+    left: 20px;
+
+    transform: rotate(20deg) scale(0.75);
+}
+
+.leaf.three {
+    right: -10px;
+    bottom: 100px;
+
+    transform: rotate(150deg);
+}
+
+.leaf.four {
+    right: 35px;
+    bottom: 45px;
+
+    transform: rotate(110deg) scale(0.75);
+}
+
+
+/* ==============================
+   FLOWERS
+============================== */
+
+.flower {
+    position: absolute;
+
+    width: 45px;
+    height: 45px;
+
+    z-index: 1;
+
+    pointer-events: none;
+}
+
+.flower::before,
+.flower::after {
+    content: "";
+
+    position: absolute;
+
+    width: 25px;
+    height: 25px;
+
+    background: #efb2c1;
+
+    border-radius: 50%;
+}
+
+.flower::before {
+    top: 0;
+    left: 10px;
+
+    box-shadow:
+        -13px 13px #efb2c1,
+        13px 13px #efb2c1,
+        0 26px #efb2c1;
+}
+
+.flower::after {
+    width: 12px;
+    height: 12px;
+
+    top: 17px;
+    left: 17px;
+
+    background: #e1a05e;
+}
+
+.flower.one {
+    top: 30px;
+    right: 75px;
+
+    transform: rotate(15deg);
+}
+
+.flower.two {
+    bottom: 55px;
+    left: 55px;
+
+    transform: scale(0.8) rotate(-15deg);
+}
+
+
+/* ==============================
+   GENERAL SECTION HEADER
+============================== */
+
+.section-header {
+    max-width: 650px;
+
+    margin: 0 auto 45px;
+
+    text-align: center;
+}
+
+.section-header .small-title {
+    margin-bottom: 12px;
+}
+
+.section-header h2 {
+    margin-bottom: 15px;
+
+    color: #315438;
+
+    font-family: Georgia, serif;
+
+    font-size: 42px;
+    line-height: 1.15;
+}
+
+.section-header > p:last-child {
+    color: #718073;
+
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+
+/* ==============================
+   RECEIPT REVIEW
+============================== */
+
+.receipt-review {
+    max-width: 900px;
+
+    margin: 100px auto;
+
+    padding: 0 25px;
+}
+
+.grocery-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+}
+
+.grocery-item {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 25px;
+
+    padding: 22px 25px;
+
+    background: #fffaf2;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 10px 25px rgba(73, 105, 73, 0.08);
+}
+
+.grocery-info h3 {
+    margin-bottom: 6px;
+
+    color: #38533d;
+
+    font-family: Georgia, serif;
+
+    font-size: 20px;
+}
+
+.grocery-info p {
+    color: #8a948b;
+
+    font-size: 13px;
+}
+
+.quantity {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    flex-shrink: 0;
+}
+
+.quantity input,
+.quantity select {
+    border: 1px solid #e1ddd4;
+
+    border-radius: 10px;
+
+    padding: 11px 12px;
+
+    background: white;
+
+    color: #38533d;
+
+    font-size: 14px;
+
+    outline: none;
+}
+
+.quantity input {
+    width: 100px;
+}
+
+.quantity select {
+    cursor: pointer;
+}
+
+.quantity-missing {
+    border: 1px dashed #d992a7;
+}
+
+.quantity-missing .grocery-info p {
+    color: #c77f94;
+}
+
+
+/* ==============================
+   CONFIRM BUTTON
+============================== */
+
+.confirm-button,
+.plan-button {
+    display: block;
+
+    margin: 30px auto 0;
+
+    border: none;
+
+    padding: 16px 27px;
+
+    border-radius: 15px;
+
+    background: #d992a7;
+
+    color: white;
+
+    font-size: 15px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.confirm-button:hover,
+.plan-button:hover {
+    background: #c97f96;
+
+    transform: translateY(-2px);
+}
+
+
+/* ==============================
+   KITCHEN
+============================== */
+
+.kitchen {
+    max-width: 1000px;
+
+    margin: 100px auto;
+
+    padding: 0 25px;
+
+    text-align: center;
+}
+
+.inventory {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 18px;
+}
+
+.inventory-item {
+    padding: 28px 20px;
+
+    background: #fffaf2;
+
+    border-radius: 22px;
+
+    box-shadow:
+        0 12px 30px rgba(73, 105, 73, 0.08);
+}
+
+.inventory-item h3 {
+    margin-bottom: 10px;
+
+    color: #38533d;
+
+    font-family: Georgia, serif;
+
+    font-size: 20px;
+}
+
+.inventory-item p {
+    color: #718073;
+
+    font-size: 14px;
+}
+
+
+/* ==============================
+   WEEKLY MEAL PLAN
+============================== */
+
+.meal-plan {
+    max-width: 1100px;
+
+    margin: 100px auto;
+
+    padding: 0 25px;
+}
+
+.weekly-plan {
+    display: grid;
+
+    grid-template-columns: repeat(5, 1fr);
+
+    gap: 15px;
+}
+
+.meal-day {
+    padding: 25px 18px;
+
+    background: #fffaf2;
+
+    border-radius: 22px;
+
+    box-shadow:
+        0 12px 30px rgba(73, 105, 73, 0.08);
+}
+
+.meal-day h3 {
+    margin-bottom: 15px;
+
+    color: #d1849b;
+
+    font-size: 14px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+}
+
+.meal-day h4 {
+    margin-bottom: 12px;
+
+    color: #38533d;
+
+    font-family: Georgia, serif;
+
+    font-size: 19px;
+
+    line-height: 1.3;
+}
+
+.meal-day p {
+    color: #718073;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+
+/* ==============================
+   HOW IT WORKS
+============================== */
+
+.how-it-works {
+    max-width: 1000px;
+
+    margin: 100px auto;
+
+    padding: 0 25px;
+
+    text-align: center;
+}
+
+.steps {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 22px;
+}
+
+.step {
+    background: #fffaf2;
+
+    border-radius: 25px;
+
+    padding: 35px 25px;
+
+    box-shadow:
+        0 12px 30px rgba(73, 105, 73, 0.08);
+}
+
+.step-number {
+    width: 45px;
+    height: 45px;
+
+    margin: 0 auto 20px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #dcebd4;
+
+    color: #557453;
+
+    font-weight: bold;
+}
+
+.step h3 {
+    margin-bottom: 12px;
+
+    color: #38533d;
+
+    font-family: Georgia, serif;
+
+    font-size: 23px;
+}
+
+.step p {
+    color: #718073;
+
+    font-size: 15px;
+
+    line-height: 1.6;
+}
+
+
+/* ==============================
+   FOOTER
+============================== */
+
+footer {
+    padding: 35px 20px 45px;
+
+    text-align: center;
+
+    color: #718073;
+
+    font-size: 14px;
+}
+
+
+/* ==============================
+   MOBILE
+============================== */
+
+@media (max-width: 750px) {
+
+    /* HEADER */
+
+    header {
+        padding: 20px;
+    }
+
+    nav {
+        display: none;
+    }
+
+
+    /* HERO */
+
+    .hero {
+        margin-top: 25px;
+
+        padding: 15px;
+    }
+
+    .hero-card {
+        padding: 55px 22px 60px;
+
+        border-radius: 28px;
+    }
+
+    h1 {
+        font-size: 43px;
+    }
+
+    .hero-text {
+        font-size: 16px;
+    }
+
+
+    /* SCANNER */
+
+    .scanner-area {
+        margin-top: 35px;
+    }
+
+    .scanner-area h2 {
+        font-size: 21px;
+    }
+
+    .scan-button {
+        width: 100%;
+
+        padding: 16px;
+    }
+
+
+    /* MANUAL OPTION */
+
+    .manual-option {
+        margin-top: 40px;
+    }
+
+    .manual-button {
+        width: 100%;
+    }
+
+
+    /* FLOWERS */
+
+    .flower.one {
+        top: 20px;
+        right: 12px;
+
+        transform: scale(0.7) rotate(15deg);
+    }
+
+    .flower.two {
+        bottom: 25px;
+        left: 12px;
+
+        transform: scale(0.6) rotate(-15deg);
+    }
+
+
+    /* LEAVES */
+
+    .leaf.one {
+        top: 25px;
+        left: -30px;
+
+        transform: rotate(-30deg) scale(0.75);
+    }
+
+    .leaf.two {
+        top: 100px;
+        left: -25px;
+
+        transform: rotate(20deg) scale(0.6);
+    }
+
+    .leaf.three {
+        right: -30px;
+        bottom: 100px;
+
+        transform: rotate(150deg) scale(0.75);
+    }
+
+    .leaf.four {
+        right: -20px;
+        bottom: 35px;
+
+        transform: rotate(110deg) scale(0.6);
+    }
+
+
+    /* SECTION HEADERS */
+
+    .section-header {
+        margin-bottom: 30px;
+    }
+
+    .section-header h2 {
+        font-size: 35px;
+    }
+
+
+    /* RECEIPT REVIEW */
+
+    .receipt-review {
+        margin: 70px auto;
+
+        padding: 0 15px;
+    }
+
+    .grocery-item {
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 18px;
+
+        padding: 20px;
+    }
+
+    .quantity {
+        width: 100%;
+    }
+
+    .quantity input {
+        flex: 1;
+
+        width: auto;
+    }
+
+    .quantity select {
+        flex: 1;
+    }
+
+    .confirm-button {
+        width: 100%;
+    }
+
+
+    /* KITCHEN */
+
+    .kitchen {
+        margin: 70px auto;
+
+        padding: 0 15px;
+    }
+
+    .inventory {
+        grid-template-columns: 1fr 1fr;
+
+        gap: 12px;
+    }
+
+    .inventory-item {
+        padding: 22px 15px;
+    }
+
+    .inventory-item h3 {
+        font-size: 18px;
+    }
+
+    .plan-button {
+        width: 100%;
+    }
+
+
+    /* MEAL PLAN */
+
+    .meal-plan {
+        margin: 70px auto;
+
+        padding: 0 15px;
+    }
+
+    .weekly-plan {
+        grid-template-columns: 1fr;
+
+        gap: 15px;
+    }
+
+    .meal-day {
+        padding: 23px;
+    }
+
+
+    /* HOW IT WORKS */
+
+    .how-it-works {
+        margin: 70px auto;
+
+        padding: 0 15px;
+    }
+
+    .steps {
+        grid-template-columns: 1fr;
+    }
+
+}
+```
