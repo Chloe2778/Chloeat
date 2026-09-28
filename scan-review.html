@@ -40,8 +40,9 @@
                 </h1>
 
                 <p>
-                    Chloeat is showing the text it actually found
-                    on your receipt. Check it before continuing.
+                    Chloeat cleaned up the receipt and identified
+                    the groceries and quantities it could find.
+                    Check everything before continuing.
                 </p>
 
             </div>
@@ -88,7 +89,7 @@
     <script>
 
         /*
-         * GET THE REAL OCR RESULT
+         * GET RAW OCR TEXT
          */
 
         const receiptText =
@@ -102,20 +103,562 @@
 
 
         /*
-         * SHOW EXACTLY WHAT OCR FOUND
+         * COMMON RECEIPT ABBREVIATIONS
+         *
+         * This lets Chloeat turn messy
+         * receipt names into normal names.
          */
 
-        console.log(
-            "OCR TEXT:",
-            receiptText
-        );
+        const nameCorrections = {
+
+            "chk brst": "Chicken breast",
+
+            "chkn brst": "Chicken breast",
+
+            "chicken br": "Chicken breast",
+
+            "chk breast": "Chicken breast",
+
+            "tom": "Tomatoes",
+
+            "toms": "Tomatoes",
+
+            "tomato": "Tomatoes",
+
+            "egg": "Eggs",
+
+            "eggs": "Eggs",
+
+            "broc": "Broccoli",
+
+            "brocc": "Broccoli",
+
+            "broccoli": "Broccoli",
+
+            "pot": "Potatoes",
+
+            "pots": "Potatoes",
+
+            "potato": "Potatoes",
+
+            "beef gr": "Ground beef",
+
+            "gr beef": "Ground beef",
+
+            "ground beef": "Ground beef",
+
+            "onion": "Onions",
+
+            "onions": "Onions",
+
+            "carrot": "Carrots",
+
+            "carrots": "Carrots",
+
+            "milk": "Milk",
+
+            "bread": "Bread",
+
+            "rice": "Rice",
+
+            "pasta": "Pasta",
+
+            "cheese": "Cheese"
+
+        };
 
 
         /*
-         * NO OCR RESULT
+         * WORDS THAT USUALLY AREN'T GROCERIES
          */
 
-        if (!receiptText || receiptText.trim() === "") {
+        const ignoredWords = [
+
+            "total",
+
+            "subtotal",
+
+            "tax",
+
+            "hst",
+
+            "gst",
+
+            "pst",
+
+            "cash",
+
+            "change",
+
+            "credit",
+
+            "debit",
+
+            "visa",
+
+            "mastercard",
+
+            "payment",
+
+            "balance",
+
+            "amount",
+
+            "discount",
+
+            "savings",
+
+            "thank",
+
+            "welcome",
+
+            "receipt",
+
+            "member",
+
+            "customer",
+
+            "store",
+
+            "www",
+
+            "tel",
+
+            "phone",
+
+            "date",
+
+            "time"
+
+        ];
+
+
+        /*
+         * CHECK WHETHER A LINE IS PROBABLY
+         * RECEIPT INFORMATION RATHER THAN FOOD.
+         */
+
+        function shouldIgnore(line) {
+
+            const lower =
+                line.toLowerCase();
+
+
+            return ignoredWords.some(
+                function (word) {
+
+                    return lower.includes(word);
+
+                }
+            );
+
+        }
+
+
+        /*
+         * EXTRACT A QUANTITY
+         */
+
+        function extractQuantity(text) {
+
+            /*
+             * Kilograms
+             *
+             * 1.24 kg
+             * 1.24kg
+             */
+
+            let match =
+                text.match(
+                    /(\d+(?:\.\d+)?)\s*(kg|kgs|kilogram|kilograms)\b/i
+                );
+
+
+            if (match) {
+
+                return match[1] + " kg";
+
+            }
+
+
+            /*
+             * Grams
+             *
+             * 500 g
+             * 500g
+             */
+
+            match =
+                text.match(
+                    /(\d+(?:\.\d+)?)\s*(g|grams|gram)\b/i
+                );
+
+
+            if (match) {
+
+                return match[1] + " g";
+
+            }
+
+
+            /*
+             * Millilitres
+             */
+
+            match =
+                text.match(
+                    /(\d+(?:\.\d+)?)\s*(ml|millilitre|millilitres)\b/i
+                );
+
+
+            if (match) {
+
+                return match[1] + " ml";
+
+            }
+
+
+            /*
+             * Litres
+             */
+
+            match =
+                text.match(
+                    /(\d+(?:\.\d+)?)\s*(l|litre|litres)\b/i
+                );
+
+
+            if (match) {
+
+                return match[1] + " L";
+
+            }
+
+
+            /*
+             * X UNITS
+             *
+             * 12 eggs
+             * 6 units
+             */
+
+            match =
+                text.match(
+                    /(\d+)\s*(units?|pcs?|pieces?)\b/i
+                );
+
+
+            if (match) {
+
+                return match[1] + " units";
+
+            }
+
+
+            /*
+             * NUMBER OF EGGS
+             *
+             * "12 eggs"
+             */
+
+            if (
+                /eggs?/i.test(text)
+            ) {
+
+                match =
+                    text.match(
+                        /\b(\d+)\b/
+                    );
+
+
+                if (match) {
+
+                    return match[1] + " units";
+
+                }
+
+            }
+
+
+            /*
+             * PACK COUNT
+             *
+             * 2 x 500 g
+             */
+
+            match =
+                text.match(
+                    /(\d+)\s*x\s*(\d+(?:\.\d+)?)\s*(kg|g|ml|l)\b/i
+                );
+
+
+            if (match) {
+
+                return (
+                    match[1] +
+                    " × " +
+                    match[2] +
+                    " " +
+                    match[3]
+                );
+
+            }
+
+
+            return "";
+
+        }
+
+
+        /*
+         * CLEAN THE GROCERY NAME
+         */
+
+        function cleanName(text) {
+
+            let name =
+                text;
+
+
+            /*
+             * Remove quantities
+             */
+
+            name =
+                name.replace(
+                    /\d+(?:\.\d+)?\s*(kg|kgs|g|grams|ml|l|units?|pcs?|pieces?)\b/gi,
+                    ""
+                );
+
+
+            /*
+             * Remove prices
+             *
+             * $12.99
+             * 12.99
+             */
+
+            name =
+                name.replace(
+                    /\$?\d+\.\d{2}/g,
+                    ""
+                );
+
+
+            /*
+             * Remove isolated numbers
+             */
+
+            name =
+                name.replace(
+                    /\b\d+\b/g,
+                    ""
+                );
+
+
+            /*
+             * Remove common receipt symbols
+             */
+
+            name =
+                name.replace(
+                    /[*#@]/g,
+                    ""
+                );
+
+
+            /*
+             * Clean spaces
+             */
+
+            name =
+                name
+                    .replace(/\s+/g, " ")
+                    .trim();
+
+
+            /*
+             * LOWERCASE VERSION FOR MATCHING
+             */
+
+            const lower =
+                name.toLowerCase();
+
+
+            /*
+             * LOOK FOR A KNOWN CORRECTION
+             */
+
+            for (
+                const key in nameCorrections
+            ) {
+
+                if (
+                    lower === key ||
+                    lower.includes(key)
+                ) {
+
+                    return nameCorrections[key];
+
+                }
+
+            }
+
+
+            /*
+             * CAPITALIZE NORMAL OCR TEXT
+             */
+
+            return name
+                .toLowerCase()
+                .replace(
+                    /\b\w/g,
+                    function (letter) {
+
+                        return letter.toUpperCase();
+
+                    }
+                );
+
+        }
+
+
+        /*
+         * PARSE THE RECEIPT
+         */
+
+        function parseReceipt(text) {
+
+            if (
+                !text ||
+                text.trim() === ""
+            ) {
+
+                return [];
+
+            }
+
+
+            const lines =
+                text
+                    .split("\n")
+                    .map(function (line) {
+
+                        return line.trim();
+
+                    })
+                    .filter(function (line) {
+
+                        return line.length > 1;
+
+                    });
+
+
+            const groceries = [];
+
+
+            lines.forEach(function (line) {
+
+                /*
+                 * Ignore obvious receipt information
+                 */
+
+                if (
+                    shouldIgnore(line)
+                ) {
+
+                    return;
+
+                }
+
+
+                /*
+                 * Extract quantity first
+                 */
+
+                const quantity =
+                    extractQuantity(line);
+
+
+                /*
+                 * Clean the name
+                 */
+
+                const name =
+                    cleanName(line);
+
+
+                /*
+                 * Don't add useless lines
+                 */
+
+                if (
+                    name.length < 2
+                ) {
+
+                    return;
+
+                }
+
+
+                /*
+                 * Don't add lines that
+                 * are almost entirely numbers
+                 */
+
+                const letters =
+                    name.replace(
+                        /[^a-zA-Z]/g,
+                        ""
+                    );
+
+
+                if (
+                    letters.length < 2
+                ) {
+
+                    return;
+
+                }
+
+
+                /*
+                 * Add grocery
+                 */
+
+                groceries.push({
+
+                    name: name,
+
+                    quantity: quantity
+
+                });
+
+            });
+
+
+            return groceries;
+
+        }
+
+
+        /*
+         * PARSE THE ACTUAL OCR RESULT
+         */
+
+        const groceries =
+            parseReceipt(
+                receiptText
+            );
+
+
+        /*
+         * DISPLAY GROCERIES
+         */
+
+        if (
+            groceries.length === 0
+        ) {
 
             reviewList.innerHTML = `
 
@@ -146,58 +689,35 @@
 
                 </div>
 
-                <p>
-                    Chloeat didn't find any text on the receipt.
-                    You can add groceries manually.
-                </p>
-
             `;
 
         }
 
 
-        /*
-         * OCR RESULT EXISTS
-         */
-
         else {
 
-            const lines =
-                receiptText
-                    .split("\n")
-                    .map(function (line) {
+            groceries.forEach(
+                function (grocery) {
 
-                        return line.trim();
+                    createItem(
+                        grocery.name,
+                        grocery.quantity
+                    );
 
-                    })
-                    .filter(function (line) {
-
-                        return line.length > 1;
-
-                    });
-
-
-            /*
-             * DISPLAY EVERY OCR LINE
-             *
-             * We are deliberately NOT trying
-             * to interpret the receipt yet.
-             */
-
-            lines.forEach(function (line) {
-
-                createItem(line);
-
-            });
+                }
+            );
 
         }
 
 
         /*
-         * CREATE AN ITEM
+         * CREATE REVIEW ITEM
          */
 
-        function createItem(name) {
+        function createItem(
+            name,
+            quantity
+        ) {
 
             const item =
                 document.createElement("div");
@@ -220,6 +740,7 @@
                     <input
                         class="item-quantity"
                         type="text"
+                        value="${escapeHTML(quantity)}"
                         placeholder="Quantity"
                     >
 
@@ -235,7 +756,9 @@
             `;
 
 
-            reviewList.appendChild(item);
+            reviewList.appendChild(
+                item
+            );
 
 
             item.querySelector(
@@ -253,17 +776,32 @@
 
 
         /*
-         * BASIC HTML ESCAPING
+         * PROTECT TEXT INSERTED INTO HTML
          */
 
         function escapeHTML(text) {
 
             return text
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
 
         }
 
@@ -278,7 +816,11 @@
                 "click",
                 function () {
 
-                    createItem("");
+                    createItem(
+                        "",
+                        ""
+                    );
+
 
                     const inputs =
                         reviewList.querySelectorAll(
@@ -299,7 +841,9 @@
          */
 
         document
-            .getElementById("continue-button")
+            .getElementById(
+                "continue-button"
+            )
             .addEventListener(
                 "click",
                 function () {
@@ -310,47 +854,53 @@
                         );
 
 
-                    const groceries = [];
+                    const savedGroceries = [];
 
 
-                    items.forEach(function (item) {
+                    items.forEach(
+                        function (item) {
 
-                        const name =
-                            item
-                                .querySelector(
-                                    ".item-name"
-                                )
-                                .value
-                                .trim();
-
-
-                        const quantity =
-                            item
-                                .querySelector(
-                                    ".item-quantity"
-                                )
-                                .value
-                                .trim();
+                            const name =
+                                item
+                                    .querySelector(
+                                        ".item-name"
+                                    )
+                                    .value
+                                    .trim();
 
 
-                        if (name !== "") {
+                            const quantity =
+                                item
+                                    .querySelector(
+                                        ".item-quantity"
+                                    )
+                                    .value
+                                    .trim();
 
-                            groceries.push({
 
-                                name: name,
+                            if (
+                                name !== ""
+                            ) {
 
-                                quantity: quantity
+                                savedGroceries.push({
 
-                            });
+                                    name: name,
+
+                                    quantity: quantity
+
+                                });
+
+                            }
 
                         }
-
-                    });
+                    );
 
 
                     localStorage.setItem(
                         "groceries",
-                        JSON.stringify(groceries)
+                        JSON.stringify(
+                            savedGroceries
+                        )
                     );
 
 
