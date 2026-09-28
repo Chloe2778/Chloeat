@@ -1056,3 +1056,78 @@ footer {
         transform: rotate(360deg);
     }
 }
+/* RECEIPT REVIEW PAGE */
+
+.review-page {
+    max-width: 900px;
+    margin: 80px auto;
+    padding: 0 25px 80px;
+    text-align: center;
+}
+
+.review-page .section-header {
+    max-width: 650px;
+    margin: 0 auto 45px;
+}
+
+.review-page .section-header h1 {
+    margin-bottom: 18px;
+    color: #315438;
+    font-family: Georgia, serif;
+    font-size: clamp(42px, 7vw, 64px);
+    line-height: 1.05;
+}
+
+.review-page .section-header > p:last-child {
+    color: #718073;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.review-list {
+    max-width: 750px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.review-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 22px 25px;
+    background: #fffaf2;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(73, 105, 73, 0.08);
+    text-align: left;
+}
+
+.review-item h3 {
+    margin-bottom: 6px;
+    color: #38533d;
+    font-size: 17px;
+}
+
+.review-item p {
+    color: #718073;
+    font-size: 14px;
+}
+
+.review-item button {
+    border: none;
+    background: transparent;
+    color: #c77f93;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.review-item button:hover {
+    color: #a95f76;
+}
+
+.review-page .plan-button {
+    margin-top: 35px;
+}
