@@ -37,7 +37,6 @@
 
     <main>
 
-
         <!-- ==============================
              HOME / RECEIPT SCANNER
         ============================== -->
@@ -46,13 +45,18 @@
 
             <!-- Botanical decorations -->
 
-            <div class="leaf one"></div>
-            <div class="leaf two"></div>
-            <div class="leaf three"></div>
-            <div class="leaf four"></div>
+            <div class="leaf leaf-one"></div>
+            <div class="leaf leaf-two"></div>
+            <div class="leaf leaf-three"></div>
+            <div class="leaf leaf-four"></div>
 
-            <div class="flower one"></div>
-            <div class="flower two"></div>
+            <div class="flower flower-one">
+                <span></span>
+            </div>
+
+            <div class="flower flower-two">
+                <span></span>
+            </div>
 
 
             <div class="hero-card">
@@ -90,20 +94,23 @@
                     </p>
 
 
-                    <label
-                        class="scan-button"
-                        for="receipt-upload"
-                    >
-                        Scan your receipt
-                    </label>
+                    <div class="scan-wrapper">
 
+                        <label
+                            class="scan-button"
+                            for="receipt-upload"
+                        >
+                            Scan your receipt
+                        </label>
 
-                    <input
-                        id="receipt-upload"
-                        type="file"
-                        accept="image/*"
-                        capture="environment"
-                    >
+                        <input
+                            id="receipt-upload"
+                            type="file"
+                            accept="image/*"
+                            capture="environment"
+                        >
+
+                    </div>
 
 
                     <p class="scanner-note">
@@ -134,190 +141,6 @@
                 </div>
 
             </div>
-
-        </section>
-
-
-        <!-- ==============================
-             RECEIPT REVIEW
-        ============================== -->
-
-        <section
-            class="receipt-review"
-            id="receipt-review"
-        >
-
-            <div class="section-header">
-
-                <p class="small-title">
-                    Step 2
-                </p>
-
-                <h2>
-                    Let's check your groceries.
-                </h2>
-
-                <p>
-                    Chloeat found these items on your receipt.
-                    Check the quantities before continuing.
-                </p>
-
-            </div>
-
-
-            <div class="grocery-list">
-
-                <!-- Example grocery item -->
-
-                <div class="grocery-item">
-
-                    <div class="grocery-info">
-
-                        <h3>
-                            Chicken breast
-                        </h3>
-
-                        <p>
-                            Quantity found on receipt
-                        </p>
-
-                    </div>
-
-                    <div class="quantity">
-
-                        <input
-                            type="number"
-                            value="1.24"
-                            min="0"
-                            step="0.01"
-                        >
-
-                        <select>
-                            <option value="kg">kg</option>
-                            <option value="g">g</option>
-                            <option value="lb">lb</option>
-                            <option value="oz">oz</option>
-                            <option value="units">units</option>
-                        </select>
-
-                    </div>
-
-                </div>
-
-
-                <div class="grocery-item">
-
-                    <div class="grocery-info">
-
-                        <h3>
-                            Tomatoes
-                        </h3>
-
-                        <p>
-                            Quantity found on receipt
-                        </p>
-
-                    </div>
-
-                    <div class="quantity">
-
-                        <input
-                            type="number"
-                            value="0.82"
-                            min="0"
-                            step="0.01"
-                        >
-
-                        <select>
-                            <option value="kg">kg</option>
-                            <option value="g">g</option>
-                            <option value="lb">lb</option>
-                            <option value="oz">oz</option>
-                            <option value="units">units</option>
-                        </select>
-
-                    </div>
-
-                </div>
-
-
-                <div class="grocery-item">
-
-                    <div class="grocery-info">
-
-                        <h3>
-                            Eggs
-                        </h3>
-
-                        <p>
-                            Quantity found on receipt
-                        </p>
-
-                    </div>
-
-                    <div class="quantity">
-
-                        <input
-                            type="number"
-                            value="12"
-                            min="0"
-                            step="1"
-                        >
-
-                        <select>
-                            <option value="units">units</option>
-                            <option value="dozen">dozen</option>
-                        </select>
-
-                    </div>
-
-                </div>
-
-
-                <!-- Missing quantity example -->
-
-                <div class="grocery-item quantity-missing">
-
-                    <div class="grocery-info">
-
-                        <h3>
-                            Broccoli
-                        </h3>
-
-                        <p>
-                            Quantity wasn't found on the receipt.
-                        </p>
-
-                    </div>
-
-                    <div class="quantity">
-
-                        <input
-                            type="number"
-                            placeholder="Add amount"
-                            min="0"
-                            step="0.01"
-                        >
-
-                        <select>
-                            <option value="kg">kg</option>
-                            <option value="g">g</option>
-                            <option value="units">units</option>
-                        </select>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <button
-                class="confirm-button"
-                type="button"
-            >
-                Confirm my groceries
-            </button>
 
         </section>
 
@@ -631,13 +454,8 @@
     </footer>
 
 
-    <!-- ==============================
-         JAVASCRIPT
-    ============================== -->
-
     <script src="script.js"></script>
 
 </body>
 
 </html>
-```
