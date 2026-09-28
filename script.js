@@ -15,3 +15,12 @@ if (receiptUpload) {
 
     });
 }
+const receiptStatus = document.getElementById("receipt-status");
+
+if (receiptStatus) {
+    const receiptName = localStorage.getItem("receiptName");
+
+    if (receiptName) {
+        receiptStatus.textContent = `Receipt uploaded: ${receiptName}`;
+    }
+}
