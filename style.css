@@ -898,3 +898,39 @@ footer {
     }
 
 }
+/* YOUR KITCHEN PAGE */
+
+.kitchen-page {
+    max-width: 1000px;
+    margin: 80px auto;
+    padding: 0 25px 80px;
+    text-align: center;
+}
+
+.kitchen-page .section-header {
+    max-width: 650px;
+    margin: 0 auto 45px;
+}
+
+.kitchen-page .section-header h1 {
+    margin-bottom: 18px;
+    color: #315438;
+    font-family: Georgia, serif;
+    font-size: clamp(42px, 7vw, 64px);
+    line-height: 1.05;
+}
+
+.kitchen-page .section-header > p:last-child {
+    color: #718073;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.kitchen-page .inventory {
+    max-width: 850px;
+    margin: 0 auto;
+}
+
+.kitchen-page .plan-button {
+    margin-top: 40px;
+}
