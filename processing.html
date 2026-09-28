@@ -5,12 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Reading your receipt | Chloeat</title>
+    <title>Reading Your Receipt | Chloeat</title>
 
     <link rel="stylesheet" href="style.css">
-
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-
 </head>
 
 <body>
@@ -33,22 +30,22 @@
         <section class="processing-page">
 
             <div class="processing-icon">
-                ✿
+                ✦
             </div>
 
             <p class="small-title">
-                READING YOUR RECEIPT
+                RECEIPT SCAN
             </p>
 
             <h1 id="processing-title">
-                Preparing your receipt...
+                Reading your receipt...
             </h1>
 
             <p
                 class="processing-text"
                 id="processing-message"
             >
-                We're getting everything ready.
+                Chloeat is identifying the groceries on your receipt.
             </p>
 
             <div class="loading-dots">
@@ -65,151 +62,242 @@
 
 
     <footer>
-        Made with care by Chloeat
+
+        <p>
+            Made with care by Chloeat
+        </p>
+
     </footer>
 
 
     <script>
 
-        const receiptImage =
-            localStorage.getItem("receiptImage");
-
-
-        const title =
+        const processingTitle =
             document.getElementById(
                 "processing-title"
             );
 
-
-        const message =
+        const processingMessage =
             document.getElementById(
                 "processing-message"
             );
 
 
+        /*
+         * GET THE RECEIPT IMAGE
+         */
+
+        const receiptImage =
+            localStorage.getItem(
+                "receiptImage"
+            );
+
+
+        /*
+         * MAKE SURE WE ACTUALLY
+         * HAVE A RECEIPT
+         */
+
         if (!receiptImage) {
 
-            title.textContent =
+            processingTitle.textContent =
                 "No receipt found.";
 
-            message.textContent =
-                "Please go back and upload a receipt.";
+            processingMessage.textContent =
+                "Please go back and upload a receipt first.";
+
+            throw new Error(
+                "No receipt image found."
+            );
 
         }
 
-        else {
 
-            readReceipt();
+        /*
+         * SEND RECEIPT TO OUR
+         * VERCEL BACKEND
+         */
 
-        }
-
-
-        async function readReceipt() {
+        async function analyzeReceipt() {
 
             try {
 
-                title.textContent =
+                processingTitle.textContent =
                     "Reading your receipt...";
 
-                message.textContent =
-                    "We're looking for the text on your receipt.";
+                processingMessage.textContent =
+                    "Chloeat is identifying the groceries on it.";
 
 
-                const worker =
-                    await Tesseract.createWorker(
-                        "eng",
-                        1,
+                const response =
+                    await fetch(
+                        "https://YOUR-VERCEL-DOMAIN.vercel.app/api/scan-receipt",
                         {
-                            logger: function (info) {
 
-                                console.log(info);
+                            method: "POST",
 
-                            }
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json"
+
+                            },
+
+                            body: JSON.stringify({
+
+                                image:
+                                    receiptImage
+
+                            })
+
                         }
                     );
 
 
-                title.textContent =
-                    "Finding your groceries...";
-
-                message.textContent =
-                    "We're reading the items on your receipt.";
-
-
-                const result =
-                    await worker.recognize(
-                        receiptImage
-                    );
-
-
-                const receiptText =
-                    result.data.text;
-
-
-                console.log(
-                    "REAL OCR TEXT:",
-                    receiptText
-                );
+                const data =
+                    await response.json();
 
 
                 /*
-                 * SAVE ONLY THE OCR RESULT
+                 * CHECK FOR BACKEND ERROR
+                 */
+
+                if (!response.ok) {
+
+                    console.error(
+                        "Backend error:",
+                        data
+                    );
+
+                    throw new Error(
+                        data.error ||
+                        "Receipt analysis failed."
+                    );
+
+                }
+
+
+                /*
+                 * CHECK FOR GROCERIES
+                 */
+
+                if (
+                    !data.groceries ||
+                    !Array.isArray(
+                        data.groceries
+                    )
+                ) {
+
+                    throw new Error(
+                        "The AI returned an invalid grocery list."
+                    );
+
+                }
+
+
+                /*
+                 * SAVE THE AI RESULT
                  */
 
                 localStorage.setItem(
-                    "receiptText",
-                    receiptText
+                    "groceries",
+                    JSON.stringify(
+                        data.groceries
+                    )
                 );
 
 
                 /*
-                 * REMOVE ANY OLD GROCERY DATA
+                 * SAVE THE RAW AI RESULT TOO
+                 *
+                 * This will help us debug
+                 * the scanner later.
                  */
 
-                localStorage.removeItem(
-                    "groceries"
+                localStorage.setItem(
+                    "aiReceiptResult",
+                    JSON.stringify(data)
                 );
 
 
-                await worker.terminate();
+                processingTitle.textContent =
+                    "Your groceries are ready!";
+
+                processingMessage.textContent =
+                    "Chloeat found the items on your receipt.";
 
 
-                title.textContent =
-                    "Receipt scanned!";
-
-                message.textContent =
-                    "Let's check what Chloeat found.";
-
+                /*
+                 * GO TO RECEIPT REVIEW
+                 */
 
                 setTimeout(function () {
 
-                    /*
-                     * CACHE-BUST REVIEW PAGE
-                     */
+                    window.location.href =
+                        "scan-review.html";
 
-                    window.location.href = "scan-review.html";
-                }, 1200);
+                }, 700);
+
 
             }
-
 
             catch (error) {
 
                 console.error(
-                    "OCR ERROR:",
+                    "Receipt analysis error:",
                     error
                 );
 
 
-                title.textContent =
-                    "We couldn't read the receipt.";
+                processingTitle.textContent =
+                    "Something went wrong.";
 
-                message.textContent =
-                    "Please try taking a clearer photo and try again.";
+                processingMessage.textContent =
+                    "Chloeat couldn't read this receipt. Please try again.";
+
+
+                /*
+                 * SHOW A BACK BUTTON
+                 */
+
+                const backButton =
+                    document.createElement(
+                        "a"
+                    );
+
+
+                backButton.href =
+                    "index.html";
+
+                backButton.className =
+                    "plan-button";
+
+                backButton.textContent =
+                    "Try another receipt";
+
+
+                backButton.style.marginTop =
+                    "30px";
+
+
+                document
+                    .querySelector(
+                        ".processing-page"
+                    )
+                    .appendChild(
+                        backButton
+                    );
 
             }
 
         }
+
+
+        /*
+         * START ANALYSIS
+         */
+
+        analyzeReceipt();
 
     </script>
 
