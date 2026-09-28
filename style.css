@@ -1131,3 +1131,41 @@ footer {
 .review-page .plan-button {
     margin-top: 35px;
 }
+/* REVIEW INPUTS */
+
+.review-item input {
+    display: block;
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
+.item-name {
+    color: #38533d;
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.item-quantity {
+    color: #718073;
+    font-size: 14px;
+}
+
+.review-item input:focus {
+    border-bottom: 1px solid #d992a7;
+}
+
+.add-item-button {
+    margin-top: 25px;
+    border: none;
+    background: transparent;
+    color: #c77f93;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.add-item-button:hover {
+    color: #a95f76;
+}
