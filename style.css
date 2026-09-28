@@ -76,14 +76,13 @@ nav a:hover {
 /* ==============================
    HERO SECTION
 ============================== */
-
 .hero {
     position: relative;
 
-    width: min(1100px, 94%);
+    width: 100%;
+    max-width: 1100px;
 
     margin: 45px auto 0;
-
     padding: 20px;
 
     isolation: isolate;
@@ -94,6 +93,9 @@ nav a:hover {
     z-index: 2;
 
     width: 100%;
+    max-width: 1100px;
+
+    margin: 0 auto;
 
     background: #fffaf2;
 
@@ -713,20 +715,29 @@ footer {
 
 
     /* HERO */
+@media (max-width: 750px) {
 
     .hero {
-        width: 94%;
+        width: 100%;
+        max-width: none;
 
         margin-top: 25px;
-
-        padding: 10px;
+        padding: 10px 15px;
     }
 
     .hero-card {
+        width: 100%;
+        max-width: none;
+
+        margin: 0 auto;
+
         padding: 55px 22px 60px;
 
         border-radius: 28px;
     }
+
+    /* the rest of your mobile CSS... */
+}
 
     h1 {
         font-size: 43px;
