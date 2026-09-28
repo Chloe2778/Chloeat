@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Your Kitchen | Chloeat</title>
+    <title>Your Week | Chloeat</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -20,6 +20,7 @@
 
         <nav>
             <a href="index.html">Home</a>
+            <a href="kitchen.html">My Kitchen</a>
         </nav>
 
     </header>
@@ -27,57 +28,39 @@
 
     <main>
 
-        <section class="kitchen-page">
+        <section class="week-page">
 
             <div class="section-header">
 
-                <p class="small-title">STEP 4</p>
+                <p class="small-title">STEP 5</p>
 
-                <h1>Here's what you have.</h1>
+                <h1>Here's your week.</h1>
 
-                <p>
-                    These are the groceries currently in your kitchen.
-                    You can edit, remove, or add anything before planning your week.
+                <p id="week-description">
+                    Chloeat created these meals using the groceries
+                    currently in your kitchen.
                 </p>
 
             </div>
 
 
             <!-- ==============================
-                 GROCERY LIST
+                 WEEKLY PLAN
             ============================== -->
 
             <div
-                class="inventory"
-                id="inventory"
+                class="weekly-plan"
+                id="weekly-plan"
             >
 
             </div>
 
 
-            <!-- ==============================
-                 ADD GROCERY
-            ============================== -->
-
-            <button
-                type="button"
-                class="add-item-button"
-                id="add-grocery"
-            >
-                + Add grocery
-            </button>
-
-
-            <!-- ==============================
-                 WEEKLY PLAN BUTTON
-            ============================== -->
-
             <a
-                href="week.html"
+                href="kitchen.html"
                 class="plan-button"
-                id="plan-button"
             >
-                Create my weekly plan
+                Back to My Kitchen
             </a>
 
         </section>
@@ -97,13 +80,22 @@
     <script>
 
         /*
-         * GET SAVED GROCERIES
+         * GET GROCERIES FROM YOUR KITCHEN
          */
-
-        let groceries = [];
 
         const savedGroceries =
             localStorage.getItem("groceries");
+
+
+        const weeklyPlan =
+            document.getElementById("weekly-plan");
+
+
+        const weekDescription =
+            document.getElementById("week-description");
+
+
+        let groceries = [];
 
 
         if (savedGroceries) {
@@ -115,218 +107,325 @@
 
 
         /*
-         * DISPLAY GROCERIES
+         * IF THE KITCHEN IS EMPTY
          */
 
-        const inventory =
-            document.getElementById("inventory");
+        if (groceries.length === 0) {
+
+            weekDescription.textContent =
+                "Your kitchen is empty, so Chloeat can't create a meal plan yet.";
 
 
-        function displayGroceries() {
+            weeklyPlan.innerHTML = `
 
-            inventory.innerHTML = "";
+                <div class="meal-day">
 
+                    <h3>
+                        Nothing to cook yet
+                    </h3>
 
-            /*
-             * EMPTY KITCHEN
-             */
+                    <h4>
+                        Your kitchen is empty
+                    </h4>
 
-            if (groceries.length === 0) {
-
-                inventory.innerHTML = `
-
-                    <p class="empty-kitchen">
-                        Your kitchen is empty.
-                        Add some groceries to get started.
+                    <p>
+                        Add some groceries to your kitchen
+                        and Chloeat will build your week around them.
                     </p>
 
-                `;
+                </div>
 
-                return;
-
-            }
-
-
-            /*
-             * CREATE EACH GROCERY CARD
-             */
-
-            groceries.forEach(function (grocery, index) {
-
-                const item =
-                    document.createElement("div");
-
-
-                item.className =
-                    "inventory-item";
-
-
-                item.innerHTML = `
-
-                    <div class="kitchen-item-content">
-
-                        <input
-                            class="kitchen-name"
-                            type="text"
-                            value="${grocery.name}"
-                            data-index="${index}"
-                        >
-
-                        <input
-                            class="kitchen-quantity"
-                            type="text"
-                            value="${grocery.quantity}"
-                            data-index="${index}"
-                        >
-
-                    </div>
-
-
-                    <button
-                        type="button"
-                        class="kitchen-remove"
-                        data-index="${index}"
-                    >
-                        Remove
-                    </button>
-
-                `;
-
-
-                inventory.appendChild(item);
-
-            });
-
-
-            /*
-             * REMOVE BUTTONS
-             */
-
-            const removeButtons =
-                document.querySelectorAll(".kitchen-remove");
-
-
-            removeButtons.forEach(function (button) {
-
-                button.addEventListener("click", function () {
-
-                    const index =
-                        Number(button.dataset.index);
-
-
-                    groceries.splice(index, 1);
-
-
-                    localStorage.setItem(
-                        "groceries",
-                        JSON.stringify(groceries)
-                    );
-
-
-                    displayGroceries();
-
-                });
-
-            });
-
-
-            /*
-             * NAME EDITING
-             */
-
-            const nameInputs =
-                document.querySelectorAll(".kitchen-name");
-
-
-            nameInputs.forEach(function (input) {
-
-                input.addEventListener("change", function () {
-
-                    const index =
-                        Number(input.dataset.index);
-
-
-                    groceries[index].name =
-                        input.value.trim();
-
-
-                    localStorage.setItem(
-                        "groceries",
-                        JSON.stringify(groceries)
-                    );
-
-                });
-
-            });
-
-
-            /*
-             * QUANTITY EDITING
-             */
-
-            const quantityInputs =
-                document.querySelectorAll(".kitchen-quantity");
-
-
-            quantityInputs.forEach(function (input) {
-
-                input.addEventListener("change", function () {
-
-                    const index =
-                        Number(input.dataset.index);
-
-
-                    groceries[index].quantity =
-                        input.value.trim();
-
-
-                    localStorage.setItem(
-                        "groceries",
-                        JSON.stringify(groceries)
-                    );
-
-                });
-
-            });
+            `;
 
         }
 
 
         /*
-         * ADD GROCERY BUTTON
+         * OTHERWISE, CREATE THE MEAL PLAN
          */
 
-        const addGroceryButton =
-            document.getElementById("add-grocery");
+        else {
 
 
-        addGroceryButton.addEventListener("click", function () {
+            /*
+             * CREATE A SEARCHABLE LIST
+             */
 
-            groceries.push({
+            const groceryNames =
+                groceries
+                    .map(function (grocery) {
 
-                name: "New grocery",
+                        return grocery.name
+                            .toLowerCase()
+                            .trim();
 
-                quantity: ""
-
-            });
-
-
-            localStorage.setItem(
-                "groceries",
-                JSON.stringify(groceries)
-            );
+                    });
 
 
-            displayGroceries();
+            /*
+             * CHECK WHETHER AN INGREDIENT EXISTS
+             */
 
-        });
+            function hasIngredient(words) {
+
+                return words.some(function (word) {
+
+                    return groceryNames.some(function (grocery) {
+
+                        return grocery.includes(word);
+
+                    });
+
+                });
+
+            }
 
 
-        /*
-         * FIRST DISPLAY
-         */
+            /*
+             * STORE POSSIBLE MEALS
+             */
 
-        displayGroceries();
+            const possibleMeals = [];
+
+
+            /*
+             * CHICKEN MEAL
+             */
+
+            if (
+                hasIngredient([
+                    "chicken",
+                    "chicken breast",
+                    "chicken thigh"
+                ])
+            ) {
+
+                possibleMeals.push({
+
+                    title: "Chicken Rice Bowl",
+
+                    description:
+                        "Chicken with rice and vegetables from your kitchen.",
+
+                    ingredients:
+                        "Uses your chicken"
+
+                });
+
+            }
+
+
+            /*
+             * EGG MEAL
+             */
+
+            if (
+                hasIngredient([
+                    "egg",
+                    "eggs"
+                ])
+            ) {
+
+                possibleMeals.push({
+
+                    title: "Vegetable Omelette",
+
+                    description:
+                        "Eggs cooked with vegetables you already have.",
+
+                    ingredients:
+                        "Uses your eggs"
+
+                });
+
+            }
+
+
+            /*
+             * TOMATO MEAL
+             */
+
+            if (
+                hasIngredient([
+                    "tomato",
+                    "tomatoes"
+                ])
+            ) {
+
+                possibleMeals.push({
+
+                    title: "Tomato Pasta",
+
+                    description:
+                        "Pasta with fresh tomatoes from your kitchen.",
+
+                    ingredients:
+                        "Uses your tomatoes"
+
+                });
+
+            }
+
+
+            /*
+             * BROCCOLI MEAL
+             */
+
+            if (
+                hasIngredient([
+                    "broccoli"
+                ])
+            ) {
+
+                possibleMeals.push({
+
+                    title: "Broccoli Rice Bowl",
+
+                    description:
+                        "Broccoli with rice and ingredients from your kitchen.",
+
+                    ingredients:
+                        "Uses your broccoli"
+
+                });
+
+            }
+
+
+            /*
+             * POTATO MEAL
+             */
+
+            if (
+                hasIngredient([
+                    "potato",
+                    "potatoes"
+                ])
+            ) {
+
+                possibleMeals.push({
+
+                    title: "Roasted Potatoes",
+
+                    description:
+                        "Roasted potatoes with ingredients from your kitchen.",
+
+                    ingredients:
+                        "Uses your potatoes"
+
+                });
+
+            }
+
+
+            /*
+             * IF NO MEALS CAN BE CREATED
+             */
+
+            if (possibleMeals.length === 0) {
+
+                weekDescription.textContent =
+                    "Chloeat couldn't find enough recognizable ingredients to create a meal yet.";
+
+
+                weeklyPlan.innerHTML = `
+
+                    <div class="meal-day">
+
+                        <h3>
+                            Not enough ingredients
+                        </h3>
+
+                        <h4>
+                            Let's go back to your kitchen
+                        </h4>
+
+                        <p>
+                            Add some ingredients such as chicken,
+                            eggs, tomatoes, broccoli or potatoes.
+                        </p>
+
+                    </div>
+
+                `;
+
+            }
+
+
+            /*
+             * DISPLAY THE AVAILABLE MEALS
+             */
+
+            else {
+
+                weekDescription.textContent =
+                    "These meals were created from the ingredients currently in your kitchen.";
+
+
+                const days = [
+                    "Monday",
+                    "Tuesday",
+                    "Wednesday",
+                    "Thursday",
+                    "Friday"
+                ];
+
+
+                const numberOfMeals =
+                    Math.min(
+                        possibleMeals.length,
+                        days.length
+                    );
+
+
+                for (
+                    let i = 0;
+                    i < numberOfMeals;
+                    i++
+                ) {
+
+                    const meal =
+                        possibleMeals[i];
+
+
+                    const mealCard =
+                        document.createElement("div");
+
+
+                    mealCard.className =
+                        "meal-day";
+
+
+                    mealCard.innerHTML = `
+
+                        <h3>
+                            ${days[i]}
+                        </h3>
+
+                        <h4>
+                            ${meal.title}
+                        </h4>
+
+                        <p>
+                            ${meal.description}
+                        </p>
+
+                        <small>
+                            ${meal.ingredients}
+                        </small>
+
+                    `;
+
+
+                    weeklyPlan.appendChild(
+                        mealCard
+                    );
+
+                }
+
+            }
+
+        }
 
     </script>
 
