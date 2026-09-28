@@ -1,27 +1,20 @@
 export default async function handler(req, res) {
 
     if (req.method !== "POST") {
-
         return res.status(405).json({
             error: "Method not allowed"
         });
-
     }
-
 
     try {
 
         const { image } = req.body;
 
-
         if (!image) {
-
             return res.status(400).json({
                 error: "No receipt image was provided."
             });
-
         }
-
 
         const response = await fetch(
             "https://openrouter.ai/api/v1/chat/completions",
@@ -51,25 +44,22 @@ export default async function handler(req, res) {
                                     text: `
 Look at this grocery receipt.
 
-Identify the actual grocery/food items purchased.
+Identify the actual grocery or food items purchased.
 
 Ignore:
 - prices
 - taxes
 - totals
 - discounts
-- payment information
 - store information
-- loyalty information
+- payment information
 
-For each grocery item, provide:
+For every grocery item, give:
 - name
 - quantity
 - unit
 
-If the quantity cannot be determined, use an empty string.
-
-Return ONLY valid JSON in this exact format:
+Return ONLY valid JSON:
 
 {
     "groceries": [
@@ -92,7 +82,6 @@ Return ONLY valid JSON in this exact format:
                                 }
 
                             ]
-
                         }
 
                     ]
@@ -103,20 +92,21 @@ Return ONLY valid JSON in this exact format:
         );
 
 
-        const data =
-            await response.json();
+        const data = await response.json();
 
+
+        /*
+         * TEMPORARY DEBUGGING
+         */
 
         if (!response.ok) {
 
-            console.error(
-                "OpenRouter error:",
-                data
-            );
+            return res.status(response.status).json({
 
-            return res.status(500).json({
-                error: "OpenRouter request failed.",
-                details: data
+                error: "OpenRouter returned an error.",
+
+                openrouter: data
+
             });
 
         }
@@ -129,7 +119,11 @@ Return ONLY valid JSON in this exact format:
         if (!content) {
 
             return res.status(500).json({
-                error: "The AI returned no result."
+
+                error: "OpenRouter returned no content.",
+
+                openrouter: data
+
             });
 
         }
@@ -137,41 +131,34 @@ Return ONLY valid JSON in this exact format:
 
         let result;
 
-
         try {
 
-            result =
-                JSON.parse(content);
+            result = JSON.parse(content);
 
-        }
-
-        catch (error) {
-
-            console.error(
-                "AI returned invalid JSON:",
-                content
-            );
+        } catch (error) {
 
             return res.status(500).json({
-                error: "The AI returned invalid JSON."
+
+                error: "The AI did not return valid JSON.",
+
+                aiResponse: content
+
             });
 
         }
 
 
-        return res.status(200).json(
-            result
-        );
+        return res.status(200).json(result);
 
 
-    }
-
-    catch (error) {
-
-        console.error(error);
+    } catch (error) {
 
         return res.status(500).json({
-            error: "Something went wrong."
+
+            error: "Backend error.",
+
+            message: error.message
+
         });
 
     }
