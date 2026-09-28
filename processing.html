@@ -9,7 +9,6 @@
 
     <link rel="stylesheet" href="style.css">
 
-    <!-- Tesseract.js -->
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 
 </head>
@@ -52,7 +51,6 @@
                 We're getting everything ready.
             </p>
 
-
             <div class="loading-dots">
 
                 <span></span>
@@ -73,25 +71,21 @@
 
     <script>
 
-        /*
-         * GET THE RECEIPT IMAGE
-         */
-
         const receiptImage =
             localStorage.getItem("receiptImage");
 
 
         const title =
-            document.getElementById("processing-title");
+            document.getElementById(
+                "processing-title"
+            );
 
 
         const message =
-            document.getElementById("processing-message");
+            document.getElementById(
+                "processing-message"
+            );
 
-
-        /*
-         * IF THERE IS NO RECEIPT
-         */
 
         if (!receiptImage) {
 
@@ -102,11 +96,6 @@
                 "Please go back and upload a receipt.";
 
         }
-
-
-        /*
-         * OTHERWISE START OCR
-         */
 
         else {
 
@@ -119,20 +108,12 @@
 
             try {
 
-                /*
-                 * STEP 1
-                 */
-
                 title.textContent =
                     "Reading your receipt...";
 
                 message.textContent =
                     "We're looking for the text on your receipt.";
 
-
-                /*
-                 * CREATE OCR WORKER
-                 */
 
                 const worker =
                     await Tesseract.createWorker(
@@ -148,10 +129,6 @@
                     );
 
 
-                /*
-                 * STEP 2
-                 */
-
                 title.textContent =
                     "Finding your groceries...";
 
@@ -159,32 +136,24 @@
                     "We're reading the items on your receipt.";
 
 
-                /*
-                 * RUN OCR
-                 */
-
                 const result =
                     await worker.recognize(
                         receiptImage
                     );
 
 
-                /*
-                 * GET THE TEXT
-                 */
-
                 const receiptText =
                     result.data.text;
 
 
                 console.log(
-                    "OCR RESULT:",
+                    "REAL OCR TEXT:",
                     receiptText
                 );
 
 
                 /*
-                 * SAVE OCR TEXT
+                 * SAVE ONLY THE OCR RESULT
                  */
 
                 localStorage.setItem(
@@ -194,15 +163,16 @@
 
 
                 /*
-                 * CLOSE OCR WORKER
+                 * REMOVE ANY OLD GROCERY DATA
                  */
+
+                localStorage.removeItem(
+                    "groceries"
+                );
+
 
                 await worker.terminate();
 
-
-                /*
-                 * STEP 3
-                 */
 
                 title.textContent =
                     "Receipt scanned!";
@@ -211,14 +181,15 @@
                     "Let's check what Chloeat found.";
 
 
-                /*
-                 * WAIT A MOMENT
-                 */
-
                 setTimeout(function () {
 
+                    /*
+                     * CACHE-BUST REVIEW PAGE
+                     */
+
                     window.location.href =
-                        "review.html";
+                        "review.html?scan=" +
+                        Date.now();
 
                 }, 1200);
 
