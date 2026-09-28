@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Your Week | Chloeat</title>
 
     <link rel="stylesheet" href="style.css">
@@ -11,6 +13,7 @@
 <body>
 
     <header>
+
         <a href="index.html" class="logo">
             Chloe<span>at</span>
         </a>
@@ -19,6 +22,7 @@
             <a href="index.html">Home</a>
             <a href="kitchen.html">My Kitchen</a>
         </nav>
+
     </header>
 
 
@@ -27,59 +31,37 @@
         <section class="week-page">
 
             <div class="section-header">
-                <p class="small-title">STEP 3</p>
+
+                <p class="small-title">STEP 5</p>
 
                 <h1>Here's your week.</h1>
 
                 <p>
-                    A simple meal plan made from the groceries you already have.
+                    Chloeat created these meals using the groceries
+                    currently in your kitchen.
                 </p>
+
+            </div>
+
+
+            <!-- ==============================
+                 WEEKLY PLAN
+            ============================== -->
+
+            <div
+                class="weekly-plan"
+                id="weekly-plan"
+            >
+
             </div>
 
 
-            <div class="weekly-plan">
-
-                <div class="meal-day">
-                    <h3>Monday</h3>
-                    <h4>Chicken & Rice Bowl</h4>
-                    <p>
-                        Chicken breast, rice and fresh tomatoes.
-                    </p>
-                </div>
-
-                <div class="meal-day">
-                    <h3>Tuesday</h3>
-                    <h4>Roasted Chicken & Potatoes</h4>
-                    <p>
-                        Roasted chicken with crispy potatoes.
-                    </p>
-                </div>
-
-                <div class="meal-day">
-                    <h3>Wednesday</h3>
-                    <h4>Chicken Fried Rice</h4>
-                    <p>
-                        Rice, chicken and eggs with vegetables.
-                    </p>
-                </div>
-
-                <div class="meal-day">
-                    <h3>Thursday</h3>
-                    <h4>Tomato Chicken Pasta</h4>
-                    <p>
-                        Pasta with tomatoes and tender chicken.
-                    </p>
-                </div>
-
-                <div class="meal-day">
-                    <h3>Friday</h3>
-                    <h4>Chicken & Broccoli Rice</h4>
-                    <p>
-                        Chicken, broccoli and rice.
-                    </p>
-                </div>
-
-            </div>
+            <a
+                href="kitchen.html"
+                class="plan-button"
+            >
+                Back to My Kitchen
+            </a>
 
         </section>
 
@@ -87,8 +69,295 @@
 
 
     <footer>
-        Made with care by Chloeat
+
+        <p>
+            Made with care by Chloeat
+        </p>
+
     </footer>
 
+
+    <script>
+
+        /*
+         * GET GROCERIES FROM YOUR KITCHEN
+         */
+
+        const savedGroceries =
+            localStorage.getItem("groceries");
+
+
+        const weeklyPlan =
+            document.getElementById("weekly-plan");
+
+
+        let groceries = [];
+
+
+        if (savedGroceries) {
+
+            groceries =
+                JSON.parse(savedGroceries);
+
+        }
+
+
+        /*
+         * TURN GROCERY NAMES INTO ONE SEARCHABLE STRING
+         */
+
+        const groceryNames =
+            groceries
+                .map(function (grocery) {
+                    return grocery.name.toLowerCase();
+                })
+                .join(" ");
+
+
+        /*
+         * HELPER FUNCTION
+         */
+
+        function hasIngredient(words) {
+
+            return words.some(function (word) {
+
+                return groceryNames.includes(word);
+
+            });
+
+        }
+
+
+        /*
+         * CREATE MEAL IDEAS
+         */
+
+        const meals = [];
+
+
+        /*
+         * CHICKEN
+         */
+
+        if (hasIngredient([
+            "chicken",
+            "poultry"
+        ])) {
+
+            meals.push({
+
+                day: "Monday",
+
+                title: "Chicken & Rice Bowl",
+
+                description:
+                    "A simple bowl with chicken, rice and vegetables."
+
+            });
+
+        }
+
+
+        /*
+         * EGGS
+         */
+
+        if (hasIngredient([
+            "egg",
+            "eggs"
+        ])) {
+
+            meals.push({
+
+                day: "Tuesday",
+
+                title: "Veggie Omelette",
+
+                description:
+                    "Eggs cooked with the vegetables you already have."
+
+            });
+
+        }
+
+
+        /*
+         * TOMATOES
+         */
+
+        if (hasIngredient([
+            "tomato",
+            "tomatoes"
+        ])) {
+
+            meals.push({
+
+                day: "Wednesday",
+
+                title: "Tomato Pasta",
+
+                description:
+                    "A simple pasta dish with fresh tomatoes."
+
+            });
+
+        }
+
+
+        /*
+         * BROCCOLI
+         */
+
+        if (hasIngredient([
+            "broccoli"
+        ])) {
+
+            meals.push({
+
+                day: "Thursday",
+
+                title: "Broccoli Rice Bowl",
+
+                description:
+                    "Warm rice with broccoli and your choice of protein."
+
+            });
+
+        }
+
+
+        /*
+         * POTATOES
+         */
+
+        if (hasIngredient([
+            "potato",
+            "potatoes"
+        ])) {
+
+            meals.push({
+
+                day: "Friday",
+
+                title: "Roasted Potatoes & Vegetables",
+
+                description:
+                    "Roasted potatoes with the vegetables from your kitchen."
+
+            });
+
+        }
+
+
+        /*
+         * ADD MORE MEALS IF WE DON'T HAVE ENOUGH
+         */
+
+        const backupMeals = [
+
+            {
+                day: "Monday",
+                title: "Simple Grain Bowl",
+                description:
+                    "A flexible bowl built around the ingredients you have."
+            },
+
+            {
+                day: "Tuesday",
+                title: "Quick Vegetable Stir-Fry",
+                description:
+                    "Your vegetables cooked together with a simple sauce."
+            },
+
+            {
+                day: "Wednesday",
+                title: "Kitchen Pasta",
+                description:
+                    "Pasta combined with whatever vegetables and protein you have."
+            },
+
+            {
+                day: "Thursday",
+                title: "Simple Rice Bowl",
+                description:
+                    "Rice topped with ingredients from your kitchen."
+            },
+
+            {
+                day: "Friday",
+                title: "Clean-Out-the-Kitchen Dinner",
+                description:
+                    "A flexible meal designed to use up ingredients before your next shop."
+            }
+
+        ];
+
+
+        /*
+         * MAKE SURE WE HAVE FIVE DAYS
+         */
+
+        let backupIndex = 0;
+
+
+        while (meals.length < 5) {
+
+            meals.push(
+                backupMeals[backupIndex]
+            );
+
+            backupIndex++;
+
+        }
+
+
+        /*
+         * ONLY SHOW FIVE DAYS
+         */
+
+        const finalMeals =
+            meals.slice(0, 5);
+
+
+        /*
+         * DISPLAY THE MEAL PLAN
+         */
+
+        finalMeals.forEach(function (meal) {
+
+            const mealCard =
+                document.createElement("div");
+
+
+            mealCard.className =
+                "meal-day";
+
+
+            mealCard.innerHTML = `
+
+                <h3>
+                    ${meal.day}
+                </h3>
+
+                <h4>
+                    ${meal.title}
+                </h4>
+
+                <p>
+                    ${meal.description}
+                </p>
+
+            `;
+
+
+            weeklyPlan.appendChild(mealCard);
+
+        });
+
+
+    </script>
+
 </body>
+
 </html>
