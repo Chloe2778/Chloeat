@@ -24,7 +24,6 @@
 
     </header>
 
-
     <main>
 
         <section class="processing-page">
@@ -49,26 +48,20 @@
             </p>
 
             <div class="loading-dots">
-
                 <span></span>
                 <span></span>
                 <span></span>
-
             </div>
 
         </section>
 
     </main>
 
-
     <footer>
-
         <p>
             Made with care by Chloeat
         </p>
-
     </footer>
-
 
     <script>
 
@@ -82,21 +75,10 @@
                 "processing-message"
             );
 
-
-        /*
-         * GET THE RECEIPT IMAGE
-         */
-
         const receiptImage =
             localStorage.getItem(
                 "receiptImage"
             );
-
-
-        /*
-         * MAKE SURE WE ACTUALLY
-         * HAVE A RECEIPT
-         */
 
         if (!receiptImage) {
 
@@ -109,14 +91,7 @@
             throw new Error(
                 "No receipt image found."
             );
-
         }
-
-
-        /*
-         * SEND RECEIPT TO OUR
-         * VERCEL BACKEND
-         */
 
         async function analyzeReceipt() {
 
@@ -128,58 +103,38 @@
                 processingMessage.textContent =
                     "Chloeat is identifying the groceries on it.";
 
-
                 const response =
                     await fetch(
                         "https://chloeat.vercel.app/api/scan-receipt",
                         {
-
                             method: "POST",
 
                             headers: {
-
                                 "Content-Type":
                                     "application/json"
-
                             },
 
                             body: JSON.stringify({
-
                                 image:
                                     receiptImage
-
                             })
-
                         }
                     );
-
 
                 const data =
                     await response.json();
 
-
-                /*
-                 * CHECK FOR BACKEND ERROR
-                 */
+                console.log(
+                    "Backend response:",
+                    data
+                );
 
                 if (!response.ok) {
 
-                    console.error(
-                        "Backend error:",
-                        data
-                    );
-
                     throw new Error(
-                        data.error ||
-                        "Receipt analysis failed."
+                        JSON.stringify(data)
                     );
-
                 }
-
-
-                /*
-                 * CHECK FOR GROCERIES
-                 */
 
                 if (
                     !data.groceries ||
@@ -191,13 +146,7 @@
                     throw new Error(
                         "The AI returned an invalid grocery list."
                     );
-
                 }
-
-
-                /*
-                 * SAVE THE AI RESULT
-                 */
 
                 localStorage.setItem(
                     "groceries",
@@ -206,19 +155,10 @@
                     )
                 );
 
-
-                /*
-                 * SAVE THE RAW AI RESULT TOO
-                 *
-                 * This will help us debug
-                 * the scanner later.
-                 */
-
                 localStorage.setItem(
                     "aiReceiptResult",
                     JSON.stringify(data)
                 );
-
 
                 processingTitle.textContent =
                     "Your groceries are ready!";
@@ -226,18 +166,12 @@
                 processingMessage.textContent =
                     "Chloeat found the items on your receipt.";
 
-
-                /*
-                 * GO TO RECEIPT REVIEW
-                 */
-
                 setTimeout(function () {
 
                     window.location.href =
                         "scan-review.html";
 
                 }, 700);
-
 
             }
 
@@ -248,54 +182,14 @@
                     error
                 );
 
-
                 processingTitle.textContent =
                     "Something went wrong.";
 
                 processingMessage.textContent =
-                    "Chloeat couldn't read this receipt. Please try again.";
-
-
-                /*
-                 * SHOW A BACK BUTTON
-                 */
-
-                const backButton =
-                    document.createElement(
-                        "a"
-                    );
-
-
-                backButton.href =
-                    "index.html";
-
-                backButton.className =
-                    "plan-button";
-
-                backButton.textContent =
-                    "Try another receipt";
-
-
-                backButton.style.marginTop =
-                    "30px";
-
-
-                document
-                    .querySelector(
-                        ".processing-page"
-                    )
-                    .appendChild(
-                        backButton
-                    );
+                    error.message;
 
             }
-
         }
-
-
-        /*
-         * START ANALYSIS
-         */
 
         analyzeReceipt();
 
