@@ -1,6 +1,5 @@
 export default async function handler(req, res) {
 
-    // Allow requests from Chloeat's GitHub Pages site
     res.setHeader(
         "Access-Control-Allow-Origin",
         "https://chloe2778.github.io"
@@ -16,12 +15,10 @@ export default async function handler(req, res) {
         "Content-Type"
     );
 
-    // Handle browser CORS check
     if (req.method === "OPTIONS") {
         return res.status(200).end();
     }
 
-    // Only allow POST requests
     if (req.method !== "POST") {
         return res.status(405).json({
             error: "Method not allowed"
@@ -38,49 +35,64 @@ export default async function handler(req, res) {
             });
         }
 
-        const response =
-            await fetch(
-                "https://openrouter.ai/api/v1/chat/completions",
-                {
-                    method: "POST",
+        const response = await fetch(
+            "https://openrouter.ai/api/v1/chat/completions",
+            {
+                method: "POST",
 
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization":
-                            `Bearer ${process.env.OPENROUTER_API_KEY}`
-                    },
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization":
+                        `Bearer ${process.env.OPENROUTER_API_KEY}`
+                },
 
-                    body: JSON.stringify({
+                body: JSON.stringify({
 
-                        model: "openrouter/free",
+                    model: "google/gemma-4-26b-a4b-it:free",
 
-                        messages: [
-                            {
-                                role: "user",
+                    messages: [
+                        {
+                            role: "user",
 
-                                content: [
-                                    {
-                                        type: "text",
+                            content: [
+                                {
+                                    type: "text",
 
-                                        text: `
-Look at this grocery receipt.
+                                    text: `
+You are the grocery receipt scanner for an app called Chloeat.
 
-Identify the actual grocery or food items purchased.
+Look carefully at the receipt image.
+
+Identify ONLY actual food or grocery products that were purchased.
 
 Ignore:
 - prices
 - taxes
 - totals
 - discounts
-- store information
+- coupons
 - payment information
+- store information
+- loyalty information
+- transaction numbers
+- dates
+- addresses
 
-For every grocery item, give:
+For each grocery item, determine:
 - name
 - quantity
 - unit
 
-Return ONLY valid JSON:
+If quantity cannot be determined, use an empty string.
+
+If unit cannot be determined, use an empty string.
+
+Return ONLY valid JSON.
+Do not write any explanation.
+Do not write any safety message.
+Do not use markdown.
+
+Use exactly this format:
 
 {
     "groceries": [
@@ -92,21 +104,21 @@ Return ONLY valid JSON:
     ]
 }
 `
-                                    },
+                                },
 
-                                    {
-                                        type: "image_url",
+                                {
+                                    type: "image_url",
 
-                                        image_url: {
-                                            url: image
-                                        }
+                                    image_url: {
+                                        url: image
                                     }
-                                ]
-                            }
-                        ]
-                    })
-                }
-            );
+                                }
+                            ]
+                        }
+                    ]
+                })
+            }
+        );
 
         const data =
             await response.json();
