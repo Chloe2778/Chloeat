@@ -48,7 +48,7 @@ export default async function handler(req, res) {
 
                 body: JSON.stringify({
 
-                    model: "qwen/qwen3.8-27b:free",
+                  model: "dots-scr/dots3.5:free",
 
                     messages: [
                         {
