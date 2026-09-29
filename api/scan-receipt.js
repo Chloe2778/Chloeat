@@ -48,7 +48,7 @@ export default async function handler(req, res) {
 
                 body: JSON.stringify({
 
-                    model: "google/gemma-4-26b-a4b-it:free",
+                    model: "qwen/qwen3.8-27b:free",
 
                     messages: [
                         {
