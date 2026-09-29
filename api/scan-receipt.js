@@ -48,7 +48,7 @@ export default async function handler(req, res) {
 
                 body: JSON.stringify({
 
-                  model: "dots-scr/dots3.5:free",
+                  model: "openrouter/free",
 
                     messages: [
                         {
